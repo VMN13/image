@@ -1,0 +1,27 @@
+.Header {
+  display: flex;
+  justify-content: center;
+  background-color: black;
+  color: white;
+  font-size: 2rem;
+  letter-spacing: 1rem;
+  width: 100%;
+  height: 20vh;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+h1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import images from '../data/images';
 import Pagination from "../components/Pagination";
 import LazyImage from "../components/LazyImage";
+import { useTheme } from "../components/ThemeContext";
 import "../styles/Content.css";
 
 const Content = () => {
@@ -11,6 +12,7 @@ const Content = () => {
   const [favorites, setFavorites] = useState([]); // Локальное состояние для избранных
   const itemsPerPage = 9;
   const user = true; // Проверка на авторизацию
+  const { isDarkMode } = useTheme(); // Исправлено на useTheme
   // Загрузка избранных из localStorage
   useEffect(() => {
     const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -64,8 +66,7 @@ const Content = () => {
     }
   };
 
-if (!user) return <p>Пожалуйста, войдите в систему.</p>;
-
+  if (!user) return <p>Пожалуйста, войдите в систему.</p>;
 
   // Функция копирования URL изображения в буфер обмена
   const copyImageUrl = async (url) => {
@@ -78,58 +79,99 @@ if (!user) return <p>Пожалуйста, войдите в систему.</p>
     }
   };
 
+
+
+const shareImageUrl = async (url, alt) => {
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: 'Изображение из галереи',
+        text: `Посмотри на изображение "${alt}" в галерее!`,
+        url: url,
+      });
+    }  catch (err) {
+      console.log('Ошибка шаринга: ', err);
+      alert('Не удалось поделиться. Попробуйте вручную.');
+    }
+  
+} else {
+ const subject = encodeURIComponent('Изображение из галереи');
+      const body = encodeURIComponent(`Посмотри это изображение: ${alt}\n\nСсылка: ${url}`);
+      window.open(`mailto:?subject=${subject}&body=${body}`);
+}
+  };
+
+
+
   return (
-    <div className="Content">
-      {/* Инпут для поиска */}
-      <input
-        type="text"
-        placeholder="Поиск по описанию (например, 'белый мрамор')..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      
-      {/* Кнопка для переключения режима просмотра */}
-      <button className="Favorite"
-        onClick={() => setShowFavorites(!showFavorites)}
-      
-      >
-        {showFavorites ? 'Показать все' : 'Показать избранные'}
-      </button>
-      
-      <div className="Main">
-        {currentImages.length > 0 ? (
-          currentImages.map((image) => (
-            <div className="first_block" key={image.id}>
-              <div className="internal_content">
-                <LazyImage src={image.url} alt={image.alt} />
-                <div className="buttons-container">
-                  <button 
-                    className="copy-button" 
-                    onClick={() => copyImageUrl(image.url)}
-                  >
-                    Копировать
-                  </button>
-                  <button 
-                    className="favorite-button" 
-                    onClick={() => toggleFavorite(image.id)}
-                    style={{ backgroundColor: isFavorite(image.id) ? '#ff6b6b' : '#ccc' }}
-                  >
-                    {isFavorite(image.id) ? '❤️' : '🤍'}
-                  </button>
+    <div className={`Content ${isDarkMode ? 'dark' : 'light'}`}>
+      <div className="content">
+        {/* Инпут для поиска */}
+        <input
+          type="text"
+          placeholder="Поиск по описанию (например, 'белый мрамор')..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        {/* Кнопка для переключения режима просмотра */}
+        <button className="Favorite"
+          onClick={() => setShowFavorites(!showFavorites)}
+        >
+          {showFavorites ? 'Показать все' : 'Показать избранные'}
+        </button>
+
+        <div className="Main">
+          {currentImages.length > 0 ? (
+            currentImages.map((image) => (
+              
+              <div className="first_block" key={image.id}>
+                
+                <div className="internal_content">
+                  
+                  <LazyImage src={image.url} alt={image.alt} />
+
+                  <div className="buttons-container">
+                    <button
+                      className="copy-button"
+                      onClick={() => copyImageUrl(image.url)}
+                    >
+                      Copy
+                    </button>
+                    <button
+                      className="favorite-button"
+                      onClick={() => toggleFavorite(image.id)}
+                    >
+                      {isFavorite(image.id) ? '❤️' : '🤍'}
+                    </button>
+                   
+  <button
+                      className="share-button"
+                      onClick={() => shareImageUrl(image.url, image.alt)}
+                    >
+                      Share
+                    </button>
+                    
+                  </div>
+                  
                 </div>
+                
               </div>
+              
+            ))
+          ) : (
+            <div className="NotFound">
+              <p>Изображения не найдены. Попробуйте другой запрос.</p>
             </div>
-          ))
-        ) : (
-          <p>Изображения не найдены. Попробуйте другой запрос.</p>
+          )}
+        </div>
+
+        {totalPages > 1 && (
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
         )}
+
+        <p>Страница {currentPage} из {totalPages} (Найдено: {filteredImages.length})</p>
       </div>
-      
-      {totalPages > 1 && (
-        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
-      )}
-      
-      <p>Страница {currentPage} из {totalPages} (Найдено: {filteredImages.length})</p>
     </div>
   );
 };

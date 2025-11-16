@@ -1,13 +1,77 @@
-.Content {
+.Content.light {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: black;
-  color: white;
+  border-width: 2px;
+  padding: 20px;
   font-size: 1rem;
   letter-spacing: 1rem;
   width: 100%;
   height: 70vh;
+  position: relative; /* Для позиционирования ::before */
+  overflow: hidden; /* Чтобы blur не выходил за границы */
+}
+
+.Content.light::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
+  background-size: cover;
+  background-position: center;
+  filter: blur(10px); /* Blur на изображении */
+  z-index: -1; /* Позади контента */
+}
+
+.Content.dark {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  font-size: 1rem;
+  letter-spacing: 1rem;
+  width: 100%;
+  height: 70vh;
+  position: relative;
+  overflow: hidden;
+  color: rgb(255, 255, 255);
+}
+
+.Content.dark::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
+  background-size: cover;
+  background-position: center;
+  filter: blur(10px);
+  z-index: -1;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.8); /* Полупрозрачный фон для матового эффекта */
+}
+
+.Content.dark .content {
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 20px;
+}
+
+.Content.light .content {
+   border-radius: 20px;
 }
 
 .Main {
@@ -15,11 +79,13 @@
   scroll-behavior: smooth;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Изменено с center на flex-start, чтобы блоки шли сверху */
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
-  height: 100%; /* Добавлено, чтобы скролл работал */
-  gap: 10px; /* Добавлено для отступов между блоками */
+  height: 100%;
+  gap: 10px;
+  border-radius: 20px;
+  padding: 20px;
 }
 
 input {
@@ -32,6 +98,10 @@ input {
   padding: 20px;
 }
 
+.Content.dark input {
+  color: rgb(255, 255, 255);
+  background-color: rgba(0, 0, 0, 0.5);
+}
 
 .Favorite {
   margin: auto;
@@ -40,6 +110,13 @@ input {
   border-radius: 5px;
   width: 66%;
   height: 20px;
+  
+}
+
+.Content.dark .Favorite {
+  color: rgb(255, 255, 255);
+  background-color: rgba(0, 0, 0, 0.5);
+  
 }
 
 .first_block {
@@ -48,7 +125,6 @@ input {
   justify-content: center;
   align-items: center;
   width: 100%;
-  /* height: 100%; Убрано, чтобы блоки не накладывались */
 }
 
 .internal_content {
@@ -61,11 +137,65 @@ input {
   background-color: white;
   color: black;
   border-radius: 20px;
+  position: relative;
+}
+
+.Content.dark .internal_content {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: rgb(255, 255, 255);
 }
 
 img {
-  width: 142%;
-    height: 213px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 20px;
 }
 
+.buttons-container {
+  position: absolute;
+  bottom: 0px;
+  right: 10px;
+  
+  gap: 5px;
+}
+
+.copy-button, .favorite-button {
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.copy-button:hover, .favorite-button:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scale(1.2);
+  transition: all 0.3s ease-in-out;
+}
+
+.favorite-button {
+  height: 30px;
+  border-radius: 20px;
+}
+
+.favorite-button:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+  transition: all 0.3s ease-in-out;
+  
+}
+
+.Content.dark .copy-button, .Content.dark .favorite-button {
+  background: rgba(0, 0, 0, 0.8);
+  color: rgb(255, 255, 255);
+}
+
+.NotFound {
+  text-align: center;
+  color: rgb(0, 0, 0);
+}
+
+.Content.dark .NotFound {
+  color: rgb(255, 255, 255);
+}

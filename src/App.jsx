@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import React, { useState, useEffect } from "react";
-
+import { ThemeProvider } from './components/ThemeContext';
 import Content from "./content/Content";
 import Header from "./header/Header";
 import Footer from "./footer/Footer";
@@ -22,6 +22,7 @@ const App = () => {
 
   return (
     <>
+      <ThemeProvider>
      <Header />
         <Router>
       <div className="App">
@@ -33,6 +34,7 @@ const App = () => {
       </div>
     </Router>
       <Footer />
+      </ThemeProvider>
     </>
   );
 };

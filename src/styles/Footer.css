@@ -1,8 +1,6 @@
-.Footer {
+.Footer  {
   display: flex;
   justify-content: center;
-  background-color: black;
-  color: white;
   font-size: 2rem;
   letter-spacing: 1rem;
   width: 100%;

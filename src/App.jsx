@@ -26,7 +26,7 @@ const App = () => {
       <div className="App">
         
         <Routes>
-          <Route path="/" element={user ? <Content /> : <Navigate to="/auth" />} />
+          <Route path="/" element={<Content user={user} />} />
           
         </Routes>
       </div>

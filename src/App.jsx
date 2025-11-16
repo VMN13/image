@@ -22,6 +22,7 @@ const App = () => {
 
   return (
     <>
+     <Header />
         <Router>
       <div className="App">
         
@@ -31,8 +32,6 @@ const App = () => {
         </Routes>
       </div>
     </Router>
-      <Header />
-      <Content />
       <Footer />
     </>
   );

@@ -3,6 +3,8 @@ import images from '../data/images';
 import Pagination from "../components/Pagination";
 import LazyImage from "../components/LazyImage";
 import { useTheme } from "../components/ThemeContext";
+import ImageModal from "../components/ImagbeModal";
+
 import "../styles/Content.css";
 
 const Content = () => {
@@ -10,6 +12,8 @@ const Content = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showFavorites, setShowFavorites] = useState(false);
   const [favorites, setFavorites] = useState([]); // Локальное состояние для избранных
+  const [modalImage, setModalImage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const itemsPerPage = 9;
   const user = true; // Проверка на авторизацию
   const { isDarkMode } = useTheme(); // Исправлено на useTheme
@@ -65,6 +69,19 @@ const Content = () => {
       setCurrentPage(page);
     }
   };
+
+
+  const openModal = (image) => {
+    setModalImage(image);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalImage(null);
+    setIsModalOpen(false);
+  };
+
+
 
   if (!user) return <p>Пожалуйста, войдите в систему.</p>;
 
@@ -172,6 +189,11 @@ const shareImageUrl = async (url, alt) => {
 
         <p>Страница {currentPage} из {totalPages} (Найдено: {filteredImages.length})</p>
       </div>
+      <ImageModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        image={modalImage}
+      />
     </div>
   );
 };

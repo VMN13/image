@@ -1,4 +1,3 @@
-
 .Content {
   display: flex;
   flex-direction: column;
@@ -12,11 +11,35 @@
 }
 
 .Main {
+  overflow-y: auto;
+  scroll-behavior: smooth;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; /* Изменено с center на flex-start, чтобы блоки шли сверху */
   align-items: center;
   width: 100%;
+  height: 100%; /* Добавлено, чтобы скролл работал */
+  gap: 10px; /* Добавлено для отступов между блоками */
+}
+
+input {
+  margin: auto;
+  color: rgb(0, 0, 0);
+  background-color: white;
+  border-radius: 10px;
+  width: 66%;
+  height: 40px;
+  padding: 20px;
+}
+
+
+.Favorite {
+  margin: auto;
+  color: rgb(0, 0, 0);
+  background-color: white;
+  border-radius: 5px;
+  width: 66%;
+  height: 20px;
 }
 
 .first_block {
@@ -25,7 +48,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
+  /* height: 100%; Убрано, чтобы блоки не накладывались */
 }
 
 .internal_content {
@@ -33,19 +56,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 20vh;
-  height: 10vh;
+  width: 30vh;
+  height: 25vh;
   background-color: white;
   color: black;
   border-radius: 20px;
 }
 
 img {
-  width: 100%;
-  height: 100%;
+  width: 142%;
+    height: 213px;
   border-radius: 20px;
 }
-
-
-
 

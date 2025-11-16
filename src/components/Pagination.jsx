@@ -20,6 +20,7 @@ const goToNext = () => {
   return (
     <div>
       <button onClick={goToPrevious} disabled={currentPage === 1}>Previous</button>
+      
       {Array.from({length: totalPages}, (_, index) => (
         <button key={index + 1}
           onClick={() => {

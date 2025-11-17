@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect} from "react";
 
-const LazyImage = ({ src, alt }) => {
+const LazyImage = ({ src, alt, style, onClick, index = 0}) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [hasError, setHasError] = useState(false);
-
+  const [isVisible, setIsVisible] = useState(false);
   const imgRef = useRef();
 
 
@@ -13,11 +13,15 @@ const LazyImage = ({ src, alt }) => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsInView(true);
-          observer.disconnect(); // Останавливаем наблюдение после загрузки
+          setIsVisible(true);
+         
+        } else {
+          setIsInView(false);
         }
       },
       { threshold: 0.1 } // Загружаем, когда 10% изображения в viewport
     );
+
     if (imgRef.current) {
       observer.observe(imgRef.current);
     }
@@ -25,6 +29,10 @@ const LazyImage = ({ src, alt }) => {
   }, []);
   const handleLoad = () => {
     setIsLoaded(true);
+  };
+
+  const handleError = () => {
+    setHasError(true);
   };
 
 
@@ -36,8 +44,14 @@ const LazyImage = ({ src, alt }) => {
         <img
           src={src}
           alt={alt}
+          style={{...style, display: isLoaded ? 'block' : 'none',
+            animationDelay: `${index * 0.1}s`
+          }}
+          onClick={onClick}
           onLoad={handleLoad}
-          style={{display: isLoaded ? 'block' : 'none'}}
+          className={isVisible ? 'fade-in' : ''}
+          onError={handleError}
+      
         />
       )}
 </div>

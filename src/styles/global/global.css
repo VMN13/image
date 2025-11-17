@@ -1,4 +1,7 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+
 * {
   margin: 0;
   padding: 0;
@@ -8,6 +11,7 @@
 html, body {
   overflow-x: hidden;
   transition: background-color 0.3s, color 0.3s;
+   font-family: "Quicksand", sans-serif;
 }
 
 
@@ -21,23 +25,20 @@ h1 {
   height: 10vh;
 }
 
+.counter {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding: 30px;
+}
+
 .image {
   object-fit: cover;
   width: 142%;
   height: 213px;
 }
 
-.favorite-button {
-  height: 30px;
-  border-radius: 20px;
-}
 
-.favorite-button:hover {
-  cursor: pointer;
-  transform: scale(1.2);
-  transition: all 0.3s ease-in-out;
-  
-}
 
 .NotFound {
   display: flex;

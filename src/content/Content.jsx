@@ -4,14 +4,18 @@ import Pagination from "../components/Pagination";
 import LazyImage from "../components/LazyImage";
 import { useTheme } from "../components/ThemeContext";
 import ImageModal from "../components/ImagbeModal";
-
+import PhotoCounter from "../components/PhotoCounter";
 import "../styles/Content.css";
+import CountUp from "react-countup";
+
 
 const Content = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [showFavorites, setShowFavorites] = useState(false);
+  const [showDislikes, setShowDislikes] = useState(false);
   const [favorites, setFavorites] = useState([]); // Локальное состояние для избранных
+  const [dislikes, setDislikes] = useState([]); // Локальное состояние для дизлайков
   const [modalImage, setModalImage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const itemsPerPage = 9;
@@ -19,9 +23,19 @@ const Content = () => {
   const { isDarkMode } = useTheme(); // Исправлено на useTheme
   // Загрузка избранных из localStorage
   useEffect(() => {
+    try {
     const savedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const savedDislikes = JSON.parse(localStorage.getItem('dislikes')) || [];
     setFavorites(savedFavorites);
+    setDislikes(savedDislikes);
+    
+    } catch (error) {
+      console.error('Error parsing favorites from localStorage:', error);
+    }
   }, []);
+
+
+ 
 
   // Функция для добавления/удаления из избранных
   const toggleFavorite = (id) => {
@@ -32,25 +46,46 @@ const Content = () => {
     localStorage.setItem('favorites', JSON.stringify(newFavorites));
   };
 
+
+  const toggleDislike = (id) => {
+    const newDislikes = dislikes.includes(id)
+      ? dislikes.filter(dislikeId => dislikeId !== id)
+      : [...dislikes, id];
+      setDislikes(newDislikes);
+      localStorage.setItem('dislikes', JSON.stringify(newDislikes));
+  };
+
+
   // Функция для проверки, является ли изображение избранным
   const isFavorite = (id) => favorites.includes(id);
 
   // Функция для получения только избранных изображений
   const getFavoriteImages = (images) => images.filter(image => favorites.includes(image.id));
-
-  // Отладка: проверьте консоль
-  console.log('favorites:', favorites); // Должен быть массив
-  console.log('isFavorite function:', isFavorite); // Должна быть функция
+  const isDisliked = (id) => dislikes.includes(id);
+  
 
   // Фильтрация изображений
   let filteredImages = images.filter(image =>
     image.alt.toLowerCase().includes(searchTerm.toLowerCase())
+    
   );
+
+if (!showDislikes) {
+    filteredImages = filteredImages.filter(image => !dislikes.includes(image.id));
+}
+
+if  (showDislikes) {
+    filteredImages = filteredImages.filter(image => dislikes.includes(image.id));
+
+}
+
 
   // Если показываем только избранные, дополнительная фильтрация
   if (showFavorites) {
     filteredImages = getFavoriteImages(filteredImages);
   }
+
+
 
   // Пагинация
   const totalPages = Math.ceil(filteredImages.length / itemsPerPage);
@@ -112,7 +147,7 @@ const shareImageUrl = async (url, alt) => {
     }
   
 } else {
- const subject = encodeURIComponent('Изображение из галереи');
+  const subject = encodeURIComponent('Изображение из галереи');
       const body = encodeURIComponent(`Посмотри это изображение: ${alt}\n\nСсылка: ${url}`);
       window.open(`mailto:?subject=${subject}&body=${body}`);
 }
@@ -123,6 +158,7 @@ const shareImageUrl = async (url, alt) => {
   return (
     <div className={`Content ${isDarkMode ? 'dark' : 'light'}`}>
       <div className="content">
+         <PhotoCounter />
         {/* Инпут для поиска */}
         <input
           type="text"
@@ -137,6 +173,9 @@ const shareImageUrl = async (url, alt) => {
         >
           {showFavorites ? 'Показать все' : 'Показать избранные'}
         </button>
+        <button className="Dislike" onClick={() => setShowDislikes(!showDislikes)}>
+          {showDislikes ? 'Убрать дизлайки' : 'Показать дизлайки'}
+        </button>
 
         <div className="Main">
           {currentImages.length > 0 ? (
@@ -146,7 +185,9 @@ const shareImageUrl = async (url, alt) => {
                 
                 <div className="internal_content">
                   
-                  <LazyImage src={image.url} alt={image.alt} />
+                  <LazyImage src={image.url} alt={image.alt}
+                    onClick={() => openModal(image)}
+                  />
 
                   <div className="buttons-container">
                     <button
@@ -155,20 +196,18 @@ const shareImageUrl = async (url, alt) => {
                     >
                       Copy
                     </button>
+                    
                     <button
                       className="favorite-button"
                       onClick={() => toggleFavorite(image.id)}
                     >
                       {isFavorite(image.id) ? '❤️' : '🤍'}
                     </button>
-                   
-  <button
-                      className="share-button"
-                      onClick={() => shareImageUrl(image.url, image.alt)}
+                    <button className="dislike-button"
+                      onClick={() => toggleDislike(image.id)}
                     >
-                      Share
+                      {isDisliked(image.id) ? '👎' : '👎'}
                     </button>
-                    
                   </div>
                   
                 </div>
@@ -184,7 +223,7 @@ const shareImageUrl = async (url, alt) => {
         </div>
 
         {totalPages > 1 && (
-          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+          <Pagination currentPage={currentPage}  onPageChange={handlePageChange} />
         )}
 
         <p>Страница {currentPage} из {totalPages} (Найдено: {filteredImages.length})</p>
@@ -192,6 +231,7 @@ const shareImageUrl = async (url, alt) => {
       <ImageModal
         isOpen={isModalOpen}
         onClose={closeModal}
+        openModal={openModal}
         image={modalImage}
       />
     </div>

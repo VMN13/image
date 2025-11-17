@@ -4,10 +4,10 @@ import '../styles/Footer.css';
 const Footer = () => {
   const {isDarkMode} = useTheme();
   return (
-    <div className={isDarkMode ? 'dark' : 'light'}>
+    <div className={`Footer ${isDarkMode ? "dark" : "light"}`}>
     <div className="Footer">
       <div className="footer">
-      <h1>Footer</h1>
+      <h1>2025 ©<br/> Image Gallery<br/> All rights reserved</h1>
       </div>
     </div>
     </div>

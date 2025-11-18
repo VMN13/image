@@ -19,7 +19,7 @@ const goToNext = () => {
 
   return (
     <div>
-      <button onClick={goToPrevious} disabled={currentPage === 1}>Previous</button>
+      <button onClick={goToPrevious} disabled={currentPage === 1}> ◀</button>
       
       {Array.from({length: totalPages}, (_, index) => (
         <button key={index + 1}
@@ -32,7 +32,7 @@ const goToNext = () => {
         </button>
       ))}
 
-      <button onClick={goToNext} disabled={currentPage === totalPages}>Next</button>
+      <button onClick={goToNext} disabled={currentPage === totalPages}>▶</button>
     </div>
   )
 }

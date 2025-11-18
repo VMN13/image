@@ -2,6 +2,7 @@ img.fade-in {
   opacity: 0;
   transform: translateY(20px);
   animation: fadeInUp 1s ease-out forwards;
+  will-change: transform, opacity; 
 }
 
 @keyframes fadeInUp {
@@ -19,7 +20,46 @@ img.fade-in:nth-child(even) {
   animation-delay: 0.2s;
 }
 
+.section-select.light {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  background-color: rgb(203, 203, 203);
+  cursor: pointer;
+  width: 80%;
+  color: white;
+  margin: auto;
+  border-radius: 10px;
+  transition: 1s 
+ease-in-out;
+}
 
+
+.section-select.dark {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  width: 80%;
+  color: white;
+  margin: auto;
+  border-radius: 10px;
+  transition: 1s 
+ease-in-out;
+  
+}
+
+.section-select:focus {
+  
+  border-color: #000000;
+}
 
 .Content.light {
   display: flex;
@@ -54,7 +94,6 @@ img.fade-in:nth-child(even) {
   justify-content: center;
   padding: 20px;
   font-size: 1rem;
- 
   width: 100%;
   height: 70vh;
   position: relative;
@@ -82,64 +121,132 @@ img.fade-in:nth-child(even) {
   align-items: center;
   width: 100%;
   height: 100%;
+  border-radius: 20px;
   position: relative;
   flex-direction: column;
   background-color: rgb(255 255 255 / 14%); /* Полупрозрачный фон для матового эффекта */
 }
 
-.Content.dark .content {
-  background-color: rgba(0, 0, 0, 0.8);
-  border-radius: 20px;
+.Content.dark .content .Dislike {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  
 }
 
-.Content.light .content {
-   border-radius: 20px;
+.Content.light .content   {
+  border-radius: 20px;
 }
 
 .Main {
   overflow-y: auto;
   scroll-behavior: smooth;
-  overflow-y: auto;
+
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   width: 100%;
   height: 100%;
-  gap: 10px;
+  gap: 20px;
   border-radius: 20px;
   padding: 20px;
 }
+
+.section {
+  display: flex;
+  flex-direction: column;
+}
+
 
 input {
   margin: auto;
   color: rgb(0, 0, 0);
   background-color: rgb(203, 203, 203);
   border-radius: 10px;
-  width: 66%;
   height: 40px;
   padding: 20px;
+  width: 80%;
+  margin: auto;
+    transition: 1s ease-in-out;
 }
 
+
+input::placeholder{
+  color: rgb(255, 255, 255);
+  opacity: 0.5;
+}
 .Content.dark input {
   color: rgb(255, 255, 255);
   background-color: rgba(0, 0, 0, 0.5);
 }
 
 .Favorite {
-  margin: auto;
-  color: rgb(0, 0, 0);
+  margin: 0 auto; /* Измените с auto на 0 auto для лучшего центрирования, если нужно */
   background-color: rgb(203, 203, 203);
   border-radius: 5px;
-  width: 66%;
-  height: 20px;
-  
+  height: 40px;
+  width: 120px;
+  min-width: 120px;
+  transition: 1s ease-in-out;
+}
+.Dislike {
+  margin: 0 auto; /* То же самое */
+  background-color: rgb(203, 203, 203);
+  border-radius: 5px;
+  width: 120px;
+  height: 40px;
+  min-width: 120px;
+  transition: 1s ease-in-out;
 }
 
-.Content.dark .Favorite {
+.Content.dark .Favorite  {
   color: rgb(255, 255, 255);
   background-color: rgba(0, 0, 0, 0.5);
-  
+}
+
+
+.Favorites.light,
+.Favorites.dark,
+.Dislikes.light,
+.Dislikes.dark {
+  /* Убрано: margin: 0 auto; */
+  background-color: rgb(203, 203, 203); /* Или соответствующий для dark */
+  border-radius: 5px;
+  height: 40px;
+  /* Убрано: min-width: 120px; */
+  width: 50%; /* Добавлено: каждая кнопка занимает половину ширины контейнера */
+  transition: 1s ease-in-out;
+  /* Опционально: добавить padding для визуального сходства с инпутом */
+  padding: 10px 20px;
+  box-sizing: border-box; /* Чтобы padding не влиял на ширину */
+}
+
+.Dislikes.dark {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+.Dislikes.light {
+  background-color: rgb(203, 203, 203);
+  color: black;
+}
+
+.Favorites.dark {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+
+
+
+
+.buttons-favorites {
+  display: flex;
+  margin: auto;
+  flex-direction: row;
+  gap: 2px; /* Добавьте отступ между кнопками */
+  margin-bottom: 20px;
+  width: 80%;
 }
 
 .first_block {
@@ -156,11 +263,18 @@ input {
   justify-content: center;
   align-items: center;
   width: 30vh;
-  height: 25vh;
+  height: 20vh;
   background-color: white;
   color: black;
   border-radius: 20px;
   position: relative;
+  transition: width 1s ease, height 1s ease;
+}
+
+.internal_content.zoomed {
+  width: 40vh;
+  
+  transform: none;
 }
 
 .Content.dark .internal_content {
@@ -170,46 +284,55 @@ input {
 
 img {
   width: 100%;
-  height: 210px;
+  height: 100%;
   object-fit: cover;
   border-radius: 20px;
+  transition: all 1s ease-in-out;
 }
 
 .buttons-container {
+  display: flex;
   position: absolute;
-  bottom: 0px;
+  bottom: 10px;
   right: 10px;
-  
+  flex-direction: row;
   gap: 5px;
+  z-index: 10; 
+  align-items: baseline;
+  
 }
 
-.copy-button, .favorite-button {
+
+
+.copy-button, .favorite-button, .dislike-button, .share-button {
   background: rgba(255, 255, 255, 0.8);
   border: none;
   border-radius: 5px;
   padding: 5px 10px;
-  cursor: pointer;
+   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 30px; /* Фиксированная ширина для компактности */
+  height: 30px; /* Фиксированная высота */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px; /* Размер иконки */
+  opacity: 0.4;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); ;
 }
 
-.copy-button:hover, .favorite-button:hover {
+.copy-button:hover, .favorite-button:hover, .dislike-button:hover, .share-button:hover {
   background: rgba(255, 255, 255, 0.9);
-  transform: scale(1.2);
   transition: all 0.3s ease-in-out;
+  opacity: 2;
 }
 
 .favorite-button {
-  height: 30px;
-  border-radius: 20px;
+  border-radius: 20px; /* Сохраняем круглую форму для избранного */
 }
 
-.favorite-button:hover {
-  cursor: pointer;
-  transform: scale(1.2);
-  transition: all 0.3s ease-in-out;
-  
-}
-
-.Content.dark .copy-button, .Content.dark .favorite-button {
+.Content.dark .copy-button, .Content.dark .favorite-button, .Content.dark .dislike-button, .Content.dark .share-button {
   background: rgba(0, 0, 0, 0.8);
   color: rgb(255, 255, 255);
 }

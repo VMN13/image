@@ -1,39 +1,63 @@
-/* ImageModal.css */
+/* Overlay (фон модала) */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8); /* Полупрозрачный черный фон */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1000; /* Над всем контентом */
+  cursor: pointer; /* Курсор для закрытия */
+  
 }
 
-.modal-overlay.dark {
-  background-color: rgba(0, 0, 0, 0.9);
+
+
+@keyframes modalFadeIn {
+  to {
+    opacity: 1;
+  }
 }
 
+/* Контейнер изображения */
 .modal-content {
   position: relative;
-  max-width: 90%;
-  max-height: 90%;
+  max-width: 90vw; /* Не больше 90% ширины экрана */
+  max-height: 90vh; /* Не больше 90% высоты экрана */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: scale(0.8); /* Начальный масштаб */
+  opacity: 0; /* Начальная прозрачность */
+  cursor: default; /* Курсор по умолчанию внутри */
+  animation: modalContentFadeIn 0.3s ease-out 0.1s forwards; 
 }
 
+/* Изображение */
 .modal-image {
-  width: 100%;
-  height: auto;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  max-width: 100%; /* Ограничено контейнером */
+  max-height: 100%; /* Ограничено контейнером */
+  object-fit: contain; /* Сохраняет пропорции, не обрезает */
+  border-radius: 10px; /* Опционально, для стиля */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Тень для эффекта */
 }
 
+
+@keyframes modalContentFadeIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Кнопка закрытия */
 .close-button {
   position: absolute;
-  top: -10px;
-  right: -10px;
+  top: 10px;
+  right: 10px;
   background: rgba(255, 255, 255, 0.8);
   border: none;
   border-radius: 50%;
@@ -41,10 +65,28 @@
   height: 30px;
   font-size: 20px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: black;
 }
 
-.modal-overlay.dark .close-button {
+
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+/* Для темной темы (если нужно) */
+.dark .modal-overlay {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.dark .close-button {
   background: rgba(0, 0, 0, 0.8);
   color: white;
+}
+
+.dark .close-button:hover {
+  background: rgba(0, 0, 0, 1);
 }

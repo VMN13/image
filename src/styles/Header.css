@@ -1,55 +1,57 @@
 .Counter {
-  
-  font-size: 20px;
+  font-size: 18px; /* Уменьшен для лучшей читаемости */
+  margin: 0 10px; /* Добавлен отступ для разделения элементов */
+  color: inherit; /* Наследует цвет от родителя для видимости в обоих режимах */
+  font-weight: normal; /* Для лучшей читаемости */
 }
 
 .Header {
   display: flex;
   justify-content: center;
   color: rgb(0, 0, 0);
-  font-size: 2rem;
-  letter-spacing: 1rem;
+  font-size: 1.5rem; /* Уменьшен для лучшей читаемости */
+  letter-spacing: 0.5rem; /* Уменьшен, чтобы текст не был слишком растянутым */
   width: 100%;
   height: 15vh;
-    backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   transition: 1s ease-in-out;
 }
 
 .header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between; /* Изменено для равномерного распределения элементов */
   align-items: center;
   width: 100%;
   height: 100%;
   position: relative;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  padding: 0 20px; /* Добавлен padding для предотвращения вылезания элементов */
 }
+
 .Mode.light {
-  position: absolute;
-  top: 85px;
-  right: 20px;
-  font-size: 18px;
-  background-color: rgb(37, 37, 37);
+  font-size: 16px; /* Уменьшен для компактности */
+  background-color: rgba(0, 0, 0, 0.5);
   font-weight: bold;
   color: rgb(203, 203, 203);
   cursor: pointer;
-  padding: 5px;
+  padding: 8px 12px; /* Увеличен padding для лучшего вида */
   border-radius: 10px;
+  transition: 1s ease-in-out;
+  border: none; /* Добавлено для чистоты */
 }
 
 .Mode.dark {
-  position: absolute;
   border-radius: 10px;
-  top: 85px;
-  right: 20px;
-  padding: 5px;
-  font-size: 18px;
+  padding: 8px 12px; /* Увеличен padding */
+  font-size: 16px; /* Уменьшен */
   background-color: rgb(203, 203, 203);
   font-weight: bold;
   color: rgb(37, 37, 37);
   cursor: pointer;
+  transition: 1s ease-in-out;
+  border: none; /* Добавлено */
 }
 
 .Header.light {
@@ -57,21 +59,19 @@
   background-image: url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
   background-size: cover;
   background-position: center;
-  
   color: rgb(0, 0, 0);
 }
+
 .Header.dark {
   background: rgba(0, 0, 0, 0.8);
-  background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'); /* Темное изображение для темного режима */
+  background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
   background-size: cover;
   background-position: center;
   color: rgb(255, 255, 255);
 }
 
-
-
-
 .theme-toggle {
+  /* Этот класс не используется, можно удалить или оставить для будущего */
   position: absolute;
   right: 20px;
   top: 50%;
@@ -83,13 +83,8 @@
   color: inherit;
 }
 
-
-
 h1 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+  margin: 0; /* Убрана лишняя центровка, так как .header теперь space-between */
+  font-size: 1.8rem; /* Уменьшен для компактности */
+  white-space: nowrap; /* Предотвращает перенос текста */
 }
-
-

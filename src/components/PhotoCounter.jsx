@@ -6,10 +6,9 @@ const PhotoCounter = React.memo(() => {
   const totalPhotos = images.length;
   return (
     <div className="counter">
-      <h2>
-        Общее количество уникальных фотографий: <CountUp end={totalPhotos} duration={2} />
-
-      </h2>
+     <h2>
+         Количество уникальных фотографий: <CountUp end={totalPhotos} duration={2} />
+     </h2>
     </div>
   )
 })

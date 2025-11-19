@@ -152,6 +152,17 @@ ease-in-out;
   padding: 20px;
 }
 
+
+.page-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+ 
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 .section {
   display: flex;
   flex-direction: column;
@@ -237,7 +248,32 @@ input::placeholder{
 }
 
 
+.Pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  padding-top: 10px;
+}
 
+.Pagination-button.light {
+  background-color: rgb(203, 203, 203);
+  border-radius: 5px;
+  height: 30px;
+  width: 100px;
+  margin: auto;
+  transition: 1s ease-in-out;
+}
+
+.Pagination-button.dark {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border-radius: 5px;
+  height: 30px;
+  width: 100px;
+  margin: auto;
+  transition: 1s ease-in-out;
+}
 
 
 .buttons-favorites {

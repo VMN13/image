@@ -1,7 +1,8 @@
 import React from "react";
-
+import { useTheme } from "./ThemeContext";
+  
 const Pagination = ({currentPage, totalPages, onPageChange }) => {
-
+const { isDarkMode } = useTheme();
   console.log('Pagination рендерится, currentPage:', currentPage, 'totalPages:', totalPages);
 
   const goToPrevious = () => {
@@ -18,8 +19,8 @@ const goToNext = () => {
 
 
   return (
-    <div>
-      <button onClick={goToPrevious} disabled={currentPage === 1}> ◀</button>
+    <div className='Pagination'>
+      <button className={`Pagination-button ${isDarkMode ? 'dark' : 'light'}`} onClick={goToPrevious} disabled={currentPage === 1}>◀</button>
       
       {Array.from({length: totalPages}, (_, index) => (
         <button key={index + 1}
@@ -32,7 +33,7 @@ const goToNext = () => {
         </button>
       ))}
 
-      <button onClick={goToNext} disabled={currentPage === totalPages}>▶</button>
+      <button className={`Pagination-button ${isDarkMode ? 'dark' : 'light'}`} onClick={goToNext} disabled={currentPage === totalPages}>▶</button>
     </div>
   )
 }

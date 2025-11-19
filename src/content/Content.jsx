@@ -248,8 +248,9 @@ const Content = () => {
         {totalPages > 1 && (
           <Pagination currentPage={currentPage} onPageChange={handlePageChange} />
         )}
-
+      <div className="page-info">
         <p>Страница {currentPage} из {totalPages} (Найдено: {filteredImages.length})</p>
+      </div>
       </div>
       <ImageModal
         isOpen={isModalOpen}

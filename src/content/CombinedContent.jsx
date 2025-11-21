@@ -23,9 +23,10 @@ const CombinedContent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);  // Состояние для модального окна
   const [currentSection, setCurrentSection] = useState('all');  // Состояние для раздела
   const [zoomLevel, setZoomLevel] = useState('normal'); // Состояние для уровня масштабирования
-  const [suggestions, setSuggestions] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showActionButtons, setShowActionButtons] = useState({});  // Состояние для отображения кнопок действий
+  const [actionTimeouts, setActionTimeouts] = useState({});  // Состояние для таймаутов действий
   const itemsPerPage = 9;  // Количество элементов на странице
+
   const user = true; // Пользователь авторизован
   const { isDarkMode } = useTheme();  // Получаем тему из контекста
 
@@ -68,6 +69,25 @@ useEffect(() => {
     localStorage.setItem('dislikes', JSON.stringify(newDislikes));
   };
 
+  const toggleActionButtons = (id) => {
+    const isOpen = showActionButtons[id];
+    if (isOpen) {
+      // Если открыто, закрываем и очищаем таймаут
+      setShowActionButtons(prev => ({ ...prev, [id]: false }));
+      if (actionTimeouts[id]) {
+        clearTimeout(actionTimeouts[id]);
+        setActionTimeouts(prev => ({ ...prev, [id]: null }));
+      }
+    } else {
+      // Если закрыто, открываем и устанавливаем таймаут на 5 секунд
+      setShowActionButtons(prev => ({ ...prev, [id]: true }));
+      const timeoutId = setTimeout(() => {
+        setShowActionButtons(prev => ({ ...prev, [id]: false }));
+        setActionTimeouts(prev => ({ ...prev, [id]: null }));
+      }, 5000); // 5 секунд
+      setActionTimeouts(prev => ({ ...prev, [id]: timeoutId }));
+    }
+  };
   // Функция для проверки, является ли изображение избранным
   const isFavorite = (id) => favorites.includes(id);
   const isDisliked = (id) => dislikes.includes(id);
@@ -128,8 +148,10 @@ useEffect(() => {
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
+      window.scrollTo({ top: 102, behavior: 'smooth' });
     }
   };
+
 
   // Функция для открытия модального окна
   const openModal = (image) => {
@@ -199,8 +221,8 @@ useEffect(() => {
     
     <div className={`Content ${isDarkMode ? 'dark' : 'light'}`}>
       <div className="controls-wrapper">
-        <PhotoCounter />
-        <SearchComponent 
+        <PhotoCounter /> 
+        <SearchComponent // компонент поиска
           searchTerm={searchTerm} 
           setSearchTerm={setSearchTerm}  
           images={images} 
@@ -220,7 +242,7 @@ useEffect(() => {
             <option value="food">Еда</option>
           </select>
         </div>
-        <div className="buttons-favorites">
+        <div className="buttons-favorites">  
           <button className={`Favorites ${isDarkMode ? 'dark' : 'light'}`} onClick={() => setShowFavorites(!showFavorites)}>
             {showFavorites ? 'Показать все' : 'Избранные'}
           </button> 
@@ -240,10 +262,21 @@ useEffect(() => {
                   <LazyImage src={image.url} alt={image.alt}
                     className={zoomLevel === 'zoomed' ? 'zoomed' : ''}  // fade-in добавится в LazyImage
                     onClick={() => openModal(image)} />
+                    
                   <div className="buttons-container">
-                    <button className="copy-button" onClick={() => copyImageUrl(image.url)}>
-                      📋
+                    <button className='action-button-expanded' onClick={() => toggleActionButtons(image.id)}>➦
+                      {showActionButtons[image.id] && (
+                        <div className="action-buttons-expanded">
+                          <button className="copy-button" onClick={() => copyImageUrl(image.url)}>
+                      Copy!
                     </button>
+                      <button className="share-button" onClick={() => shareImageUrl(image.url, image.alt)}>
+                      Share!
+                    </button>
+                        </div>
+                      )}
+                    </button>
+                  
                     <ImageZoom onZoomChange={setZoomLevel} />
                     <button className="favorite-button" onClick={() => toggleFavorite(image.id)}>
                       {isFavorite(image.id) ? '❤️' : '🤍'}
@@ -251,9 +284,7 @@ useEffect(() => {
                     <button className="dislike-button" onClick={() => toggleDislike(image.id)}>
                       {isDisliked(image.id) ? '❌' : '❌ '}
                     </button>
-                    <button className="share-button" onClick={() => shareImageUrl(image.url, image.alt)}>
-                      💌
-                    </button>
+                   
                   </div>
                 </div>
               </div>

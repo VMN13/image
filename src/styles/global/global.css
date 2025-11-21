@@ -74,17 +74,27 @@ p {
   width: 80%;
 }
 
-
-ntainer {
-  display: flex;
+.action-buttons-expanded.closing {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 
+
 .copy-button {
-  width: 40px;
+  width: 60px;
   height: 40px;
   border-radius: 20px;
   font-size: 20px;
+  opacity: 1;
+  transform: rotate(-20deg);
 }
 
-
+.share-button {
+  width: 60px;
+  height: 40px;
+  border-radius: 20px;
+  font-size: 20px;
+  opacity: 1;
+  transform: rotate(20deg);
+}
 

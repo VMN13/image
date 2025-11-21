@@ -5,6 +5,57 @@ img.fade-in {
   will-change: transform, opacity; 
 }
 
+.action-button-expanded {
+ width: 40px;
+ height: 40px;
+ border-radius: 20px;
+ font-size: 30px;
+}
+
+
+
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.action-button {
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 20px;
+  padding: 5px 10px;
+  width: 40px;
+  height: 40px;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.4;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.action-button:hover {
+  background: rgba(255 , 255, 255, 0.9);
+  opacity: 1;
+}
+
+.Content.dark .action-button {
+  background: rgba(0, 0, 0, 0.8);
+  color: rgb(255, 255, 255);
+
+}
+
+
+
+
 .Content.fade-in::before {  /* Анимация для фона */
   animation: fadeInUp 1.5s ease-out forwards;  /* Дольше для фона */
 }
@@ -24,6 +75,17 @@ img.fade-in {
   font-size: 16px;
   box-sizing: border-box;
   background-color: transparent; /* Прозрачный фон для видимости подсказки */
+}
+
+.search-input:focus {
+  transform: scale(1.1);  /* Увеличение input на 10% */
+  transition: transform 0.3s ease;
+}
+
+.search:focus-within {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+  z-index: 10; /* Поверх input */
 }
 
 .search-input.dark {
@@ -386,12 +448,11 @@ img {
 .buttons-container {
   display: flex;
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  bottom: -4px;
   flex-direction: row;
-  gap: 5px;
+  gap: 10px;
   z-index: 10; 
-  align-items: baseline;
+  
   
 }
 
@@ -422,6 +483,16 @@ img {
 }
 
 .favorite-button {
+  width: 40px;
+  height: 40px;
+  font-size: 30px;
+  border-radius: 20px; /* Сохраняем круглую форму для избранного */
+}
+
+.dislike-button {
+  width: 40px;
+  height: 40px;
+  font-size: 30px;
   border-radius: 20px; /* Сохраняем круглую форму для избранного */
 }
 

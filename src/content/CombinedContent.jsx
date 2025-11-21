@@ -9,6 +9,8 @@ import PhotoCounter from "../components/PhotoCounter";
 import "../styles/Content.css";
 import CountUp from "react-countup";
 
+
+
 const CombinedContent = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');  // Состояние для поиска
@@ -182,9 +184,8 @@ const CombinedContent = () => {
 
   return (
     <div className={`Content ${isDarkMode ? 'dark' : 'light'}`}>
-
       <div className="controls-wrapper">
- <PhotoCounter />
+        <PhotoCounter />
         <div className="search">
           <input
             type="text"
@@ -213,16 +214,9 @@ const CombinedContent = () => {
             {showDislikes ? 'Показать все' : 'Дизы'}
           </button>
         </div>
-
-
-
       </div>
       <div className="content">
-        {/* Элементы управления из FirstContent */}
-
-        {/* Галерея из Content */}
         <div className="section">
-          {/* Можно добавить заголовок раздела, если нужно */}
         </div>
         <div className="Main">
           {currentImages.length > 0 ? (
@@ -230,7 +224,7 @@ const CombinedContent = () => {
               <div className="first_block" key={image.id}>
                 <div className={`internal_content ${zoomLevel === 'zoomed' ? 'zoomed' : ''}`}>
                   <LazyImage src={image.url} alt={image.alt}
-                    className={zoomLevel === 'zoomed' ? 'zoomed' : ''}
+                    className={zoomLevel === 'zoomed' ? 'zoomed' : ''}  // fade-in добавится в LazyImage
                     onClick={() => openModal(image)} />
                   <div className="buttons-container">
                     <button className="copy-button" onClick={() => copyImageUrl(image.url)}>

@@ -9,6 +9,7 @@
 }
 
 html, body {
+  overflow-y: hidden;
   overflow-x: hidden;
   transition: background-color 0.3s, color 0.3s;
   font-family: "Quicksand", sans-serif;

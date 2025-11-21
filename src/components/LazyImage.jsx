@@ -51,7 +51,7 @@ const LazyImage = ({ src, alt, style, onClick, index = 0}) => {
           onLoad={handleLoad}
           className={isVisible ? 'fade-in' : ''}
           onError={handleError}
-      
+          
         />
       )}
 </div>

@@ -3,40 +3,26 @@ import images from '../data/images';
 import Pagination from "../components/Pagination";
 import LazyImage from "../components/LazyImage";
 import { useTheme } from "../components/ThemeContext";
-import ImageModal from "../components/ImagbeModal";
+import ImageModal from "../components/ImagbeModal"; 
 import ImageZoom from "../components/ImageZoom";
 import PhotoCounter from "../components/PhotoCounter";
-import SearchComponent from "../components/SearchComponent";
 import "../styles/Content.css";
 import CountUp from "react-countup";
 
-
-
-const CombinedContent = () => {
+const Content = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');  // Состояние для поиска
-  const [showFavorites, setShowFavorites] = useState(false);  // Состояние для отображения избранных
-  const [showDislikes, setShowDislikes] = useState(false);  // Состояние для отображения отложенных
-  const [favorites, setFavorites] = useState([]); // Состояние для избранных
-  const [dislikes, setDislikes] = useState([]);  // Состояние для отложенных
-  const [modalImage, setModalImage] = useState(null); // Состояние для модального окна
-  const [isModalOpen, setIsModalOpen] = useState(false);  // Состояние для модального окна
-  const [currentSection, setCurrentSection] = useState('all');  // Состояние для раздела
-  const [zoomLevel, setZoomLevel] = useState('normal'); // Состояние для уровня масштабирования
-  const [suggestions, setSuggestions] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');  // Добавляем состояние для поиска
+  const [showFavorites, setShowFavorites] = useState(false);  // Добавляем состояние для отображения избранных
+  const [showDislikes, setShowDislikes] = useState(false);  // Добавляем состояние для отображения отложенных
+  const [favorites, setFavorites] = useState([]); // Добавляем состояние для избранных
+  const [dislikes, setDislikes] = useState([]);  // Добавляем состояние для отложенных
+  const [modalImage, setModalImage] = useState(null); // Добавляем состояние для модального окна
+  const [isModalOpen, setIsModalOpen] = useState(false);  // Добавляем состояние для модального окна
+  const [currentSection, setCurrentSection] = useState('all');  // Добавляем состояние для раздела
+  const [zoomLevel, setZoomLevel] = useState('normal'); // Добавляем состояние для уровня масштабирования
   const itemsPerPage = 9;  // Количество элементов на странице
   const user = true; // Пользователь авторизован
   const { isDarkMode } = useTheme();  // Получаем тему из контекста
-
-
-useEffect(() => {
-  console.log(`CombinedContent: searchTerm changed to:`, searchTerm);
-
-}, [searchTerm]);
-
-
-
 
   // Загрузка избранных из localStorage
   useEffect(() => {
@@ -58,6 +44,7 @@ useEffect(() => {
     setFavorites(newFavorites);
     localStorage.setItem('favorites', JSON.stringify(newFavorites));
   };
+
 
   // Функция для добавления/удаления из отложенных
   const toggleDislike = (id) => {
@@ -122,7 +109,7 @@ useEffect(() => {
   // Сброс страницы при новом поиске, переключении режима или раздела
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, showFavorites, showDislikes, currentSection]);
+  }, [searchTerm, showFavorites, showDislikes, currentSection]); // Добавлено currentSection
 
   // Обработчик изменения страницы
   const handlePageChange = (page) => {
@@ -143,18 +130,18 @@ useEffect(() => {
     setIsModalOpen(false);
   };
 
-  // Обработчик изменения раздела
+  // Исправлено: setCurrentSection вместо setCurrentPage
   const handleSectionChange = (section) => {
     setCurrentSection(section);
     setCurrentPage(1); // Сброс страницы
   };
 
-  // Функция для получения заголовка раздела
+  // Исправлено: 'animals' -> 'Животные'
   const getSectionTitle = () => {
     switch (currentSection) {
       case 'nature': return 'Природа';
       case 'cities': return 'Города';
-      case 'animals': return 'Животные';
+      case 'animals': return 'Животные'; // Исправлено
       case 'tech': return 'Технологии';
       case 'food': return 'Еда';
       default: return 'Все разделы';
@@ -174,7 +161,7 @@ useEffect(() => {
     }
   };
 
-  // Функция шаринга URL изображения
+  // Исправлено: удалена лишняя скобка
   const shareImageUrl = async (url, alt) => {
     if (navigator.share) {
       try {
@@ -195,51 +182,22 @@ useEffect(() => {
   };
 
   return (
-    <>
-    
     <div className={`Content ${isDarkMode ? 'dark' : 'light'}`}>
-      <div className="controls-wrapper">
-        <PhotoCounter />
-        <SearchComponent 
-          searchTerm={searchTerm} 
-          setSearchTerm={setSearchTerm}  
-          images={images} 
-          isDarkMode={isDarkMode}/>
-        <div className="search">
-        
-          <select  
-            className={`section-select ${isDarkMode ? 'dark' : 'light'}`}
-            value={currentSection}
-            onChange={(e) => handleSectionChange(e.target.value)}  
-          >
-            <option value="all">Все разделы</option>
-            <option value="nature">Природа</option>
-            <option value="cities">Города</option>
-            <option value="animals">Животные</option>
-            <option value="tech">Технологии</option>
-            <option value="food">Еда</option>
-          </select>
-        </div>
-        <div className="buttons-favorites">
-          <button className={`Favorites ${isDarkMode ? 'dark' : 'light'}`} onClick={() => setShowFavorites(!showFavorites)}>
-            {showFavorites ? 'Показать все' : 'Избранные'}
-          </button> 
-          <button className={`Dislikes ${isDarkMode ? 'dark' : 'light'}`} onClick={() => setShowDislikes(!showDislikes)}>
-            {showDislikes ? 'Показать все' : 'Дизы'}
-          </button>
-        </div>
-      </div>
       <div className="content">
+        
+        
         <div className="section">
-        </div>
+         
+        
+</div>
         <div className="Main">
           {currentImages.length > 0 ? (
             currentImages.map((image) => (
               <div className="first_block" key={image.id}>
                 <div className={`internal_content ${zoomLevel === 'zoomed' ? 'zoomed' : ''}`}>
                   <LazyImage src={image.url} alt={image.alt}
-                    className={zoomLevel === 'zoomed' ? 'zoomed' : ''}  // fade-in добавится в LazyImage
-                    onClick={() => openModal(image)} />
+                    className={zoomLevel === 'zoomed' ? 'zoomed' : ''}
+                  onClick={() => openModal(image)} />
                   <div className="buttons-container">
                     <button className="copy-button" onClick={() => copyImageUrl(image.url)}>
                       📋
@@ -268,9 +226,9 @@ useEffect(() => {
         {totalPages > 1 && (
           <Pagination currentPage={currentPage} onPageChange={handlePageChange} />
         )}
-        <div className="page-info">
-          <p>Страница {currentPage} из {totalPages} (Найдено: {filteredImages.length})</p>
-        </div>
+      <div className="page-info">
+        <p>Страница {currentPage} из {totalPages} (Найдено: {filteredImages.length})</p>
+      </div>
       </div>
       <ImageModal
         isOpen={isModalOpen}
@@ -280,8 +238,7 @@ useEffect(() => {
         shareImageUrl={shareImageUrl}
       />
     </div>
-    </>
   );
 };
 
-export default CombinedContent;
+export default Content;

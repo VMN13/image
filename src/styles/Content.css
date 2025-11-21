@@ -5,6 +5,61 @@ img.fade-in {
   will-change: transform, opacity; 
 }
 
+.Content.fade-in::before {  /* Анимация для фона */
+  animation: fadeInUp 1.5s ease-out forwards;  /* Дольше для фона */
+}
+
+.search-input-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.search-input {
+  position: relative;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+  background-color: transparent; /* Прозрачный фон для видимости подсказки */
+}
+
+.search-input.dark {
+  color: white;
+  border-color: #555;
+}
+
+.search-input.light {
+  color: black;
+}
+
+.search-suggestion {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px;
+  font-size: 16px;
+  color: #888; /* Серый цвет для подсказки */
+  pointer-events: none; /* Не кликабельно */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  box-sizing: border-box;
+  background: transparent; /* Прозрачный фон */
+  border: none; /* Без границы */
+  z-index: 1; /* Поверх input */
+}
+
+.search-input:focus + .search-suggestion,
+.search-input:focus ~ .search-suggestion {
+  color: #ccc; /* Более светлый при фокусе */
+}
+
+
+
 @keyframes fadeInUp {
   to {
     opacity: 1;
@@ -20,6 +75,8 @@ img.fade-in:nth-child(even) {
   animation-delay: 0.2s;
 }
 
+
+
 .section-select.light {
   display: flex;
   flex-direction: row;
@@ -29,7 +86,7 @@ img.fade-in:nth-child(even) {
   border-radius: 4px;
   background-color: rgb(203, 203, 203);
   cursor: pointer;
-  width: 80%;
+  width: 100%;
   color: white;
   margin: auto;
   border-radius: 10px;
@@ -47,7 +104,7 @@ ease-in-out;
   border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.5);
   cursor: pointer;
-  width: 80%;
+  width: 100%;
   color: white;
   margin: auto;
   border-radius: 10px;
@@ -69,7 +126,7 @@ ease-in-out;
   padding: 20px;
   font-size: 1rem;
   width: 100%;
-  height: 70vh;
+
   position: relative; /* Для позиционирования ::before */
   overflow: hidden; /* Чтобы blur не выходил за границы */
 }
@@ -95,7 +152,6 @@ ease-in-out;
   padding: 20px;
   font-size: 1rem;
   width: 100%;
-  height: 70vh;
   position: relative;
   overflow: hidden;
   color: rgb(255, 255, 255);
@@ -125,6 +181,7 @@ ease-in-out;
   position: relative;
   flex-direction: column;
   background-color: rgb(255 255 255 / 14%); /* Полупрозрачный фон для матового эффекта */
+  margin-top: 30px;
 }
 
 .Content.dark .content .Dislike {
@@ -138,9 +195,7 @@ ease-in-out;
 }
 
 .Main {
-  overflow-y: auto;
   scroll-behavior: smooth;
-
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -150,6 +205,7 @@ ease-in-out;
   gap: 20px;
   border-radius: 20px;
   padding: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 
@@ -382,3 +438,4 @@ img {
 .Content.dark .NotFound {
   color: rgb(255, 255, 255);
 }
+

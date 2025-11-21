@@ -126,12 +126,9 @@ useEffect(() => {
   // 4. Фильтрация по избранным
   if (showFavorites) {
     filteredImages = getFavoriteImages(filteredImages);
-    console.log('After favorites filter:', filteredImages.length);
+    
   }
 
-  console.log('Current Section:', currentSection);
-  console.log('Filtered Images Count:', filteredImages.length);
-  console.log('Sample Filtered Image:', filteredImages[0]);
 
   // Пагинация
   const totalPages = Math.ceil(filteredImages.length / itemsPerPage);

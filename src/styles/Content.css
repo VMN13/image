@@ -6,10 +6,11 @@ img.fade-in {
 }
 
 .action-button-expanded {
- width: 40px;
- height: 40px;
- border-radius: 20px;
- font-size: 30px;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  font-size: 30px;
+  opacity: 0.7;
 }
 
 
@@ -483,6 +484,7 @@ img {
 }
 
 .favorite-button {
+  position: relative;
   width: 40px;
   height: 40px;
   font-size: 30px;

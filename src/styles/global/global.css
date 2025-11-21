@@ -81,8 +81,11 @@ p {
 
 
 .copy-button {
+  position: absolute;
   width: 60px;
   height: 40px;
+  bottom: 55px;
+  left: -45px;
   border-radius: 20px;
   font-size: 20px;
   opacity: 1;
@@ -90,6 +93,9 @@ p {
 }
 
 .share-button {
+  position: absolute;
+  bottom: 55px;
+  left:25px;
   width: 60px;
   height: 40px;
   border-radius: 20px;

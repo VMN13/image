@@ -15,7 +15,9 @@ html, body {
   
 }
 
-
+.controls-wrapper {
+ margin-top: 20vh;
+}
 
 
 h1 {
@@ -43,6 +45,7 @@ p {
   text-align: center;
   padding: 30px;
     transition: 1s ease-in-out;
+    height: 100px;
 }
 
 .image {
@@ -51,6 +54,14 @@ p {
   height: 213px;
 }
 
+
+.search {
+  display: flex;
+  width: 80%;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
 
 
 .NotFound {

@@ -1,9 +1,11 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import React, { useState, useEffect } from "react";
 import { ThemeProvider } from './components/ThemeContext';
-import Content from "./content/Content";
+
+import CombinedContent from './content/CombinedContent';  
 import Header from "./header/Header";
 import Footer from "./footer/Footer";
+
 import "./styles/global/global.css";
 
 const App = () => {
@@ -24,15 +26,17 @@ const App = () => {
     <>
       <ThemeProvider>
      <Header />
+    
         <Router>
       <div className="App">
         
         <Routes>
-          <Route path="/" element={<Content user={user} />} />
-          
+   
+          <Route path="/" element={<CombinedContent user={user} />} />
         </Routes>
       </div>
     </Router>
+
       <Footer />
       </ThemeProvider>
     </>

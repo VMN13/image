@@ -8,7 +8,9 @@ import ImageZoom from "../components/ImageZoom";
 import PhotoCounter from "../components/PhotoCounter";
 import SearchComponent from "../components/SearchComponent";
 import "../styles/Content.css";
-import CountUp from "react-countup";
+import "../styles/Content-tablet.css";
+import "../styles/Content-desktop.css";
+
 
 
 
@@ -282,7 +284,6 @@ useEffect(() => {
                     <button className="dislike-button" onClick={() => toggleDislike(image.id)}>
                       {isDisliked(image.id) ? '❌' : '❌ '}
                     </button>
-                   
                   </div>
                 </div>
               </div>

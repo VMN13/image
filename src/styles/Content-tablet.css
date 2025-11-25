@@ -1,0 +1,51 @@
+
+/* Стили для планшета (начиная с 768px) */
+@media (min-width: 768px) {
+  .Main {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 колонки для лучшего использования пространства */
+    gap: 2vw; /* Резиновый отступ */
+    padding: 3vw; /* Резиновый padding */
+  }
+  .first_block {
+    height: 30vh; /* Уже относительно */
+  }
+  .internal_content {
+    width: 80%; /* Резиново относительно родителя */
+    height: 25vh; /* Уже относительно */
+    margin: 2vh; /* Уже относительно */
+  }
+  .buttons-container {
+    bottom: -1vh; /* Резиново */
+    gap: 1.5vw; /* Резиновый gap */
+  }
+  .action-button-expanded {
+    width: 3em; /* Резиново относительно шрифта */
+    height: 3em;
+    font-size: 2em; /* Резиново */
+  }
+  .favorite-button, .dislike-button {
+    width: 3em;
+    height: 3em;
+    font-size: 2em;
+  }
+  .copy-button, .share-button {
+    width: 2.5em;
+    height: 2.5em;
+    font-size: 1em;
+  }
+  .controls-wrapper {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .buttons-favorites {
+    width: 60%; /* Уже относительно */
+    gap: 1vw; /* Резиново */
+  }
+  .section-select {
+    width: 60%; /* Уже относительно */
+  }
+  .search-input {
+    width: 60%; /* Уже относительно */
+  }
+}

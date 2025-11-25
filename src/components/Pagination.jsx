@@ -11,6 +11,9 @@ const { isDarkMode } = useTheme();
   }
 
 
+
+
+
 const goToNext = () => {
   console.log('Клик на следующую');
   onPageChange(currentPage + 1);

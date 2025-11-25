@@ -65,7 +65,11 @@ p {
 }
 
 .controls-wrapper {
-  height: 25vh;
+      display: flex;
+    height: 29vh;
+    gap: 9px;
+    flex-direction: column;
+    
 }
 
 .search {

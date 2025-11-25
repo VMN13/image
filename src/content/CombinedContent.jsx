@@ -251,6 +251,7 @@ useEffect(() => {
       <div className="content">
         <div className="section">
         </div>
+        <Pagination currentPage={currentPage}  onPageChange={handlePageChange} />
         <div className="Main">
           {currentImages.length > 0 ? (
             currentImages.map((image) => (

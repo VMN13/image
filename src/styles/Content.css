@@ -1,3 +1,5 @@
+@media screen and (max-width: 768px) {
+
 img.fade-in {
   opacity: 0;
   transform: translateY(20px);
@@ -57,6 +59,11 @@ img.fade-in {
 
 
 
+.search-suggestion {
+  color: #888;
+  pointer-events: none;
+  z-index: 1;
+}
 
 
 .Content.fade-in::before {  /* Анимация для фона */
@@ -72,7 +79,7 @@ img.fade-in {
 .search-input {
   position: relative;
   width: 100%;
-  padding: 10px;
+  padding: 9px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
@@ -507,3 +514,10 @@ img {
   color: rgb(255, 255, 255);
 }
 
+.getSectionTitle {
+  font-size: 24px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: bold;
+}
+}

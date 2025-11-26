@@ -1,7 +1,5 @@
 import { useTheme } from "../components/ThemeContext";
-import { useEffect, useState } from "react";
 import PhotoCounter  from "../components/PhotoCounter";
-import images from '../data/images'; 
 import "../styles/Header.css";
 const Header = () => {
   const { isDarkMode, toggleTheme } = useTheme();

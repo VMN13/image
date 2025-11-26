@@ -13,6 +13,8 @@ const ImageModal = ({ isOpen, onClose, image }) => {
       document.addEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'hidden'; // Запрещаем скролл фона
       document.body.classList.add('modal-open'); // Добавляем класс для blur
+      document.documentElement.overflow = 'hidden';
+     
     }
     return () => {
       document.removeEventListener('keydown', handleKeyDown);

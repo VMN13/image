@@ -1,63 +1,80 @@
-import React, {useRef } from "react";
-import CombinedContent from "../content/CombinedContent";
+import React, { useRef, useEffect } from "react";
+import { observer } from "mobx-react-lite";
 
-
-
-const SearchComponent = ({
+const SearchComponent = observer(({
   searchTerm,
-  setSearchTerm, 
+  setSearchTerm,
   images,
   isDarkMode
 }) => {
   const inputRef = useRef(null);
 
-
-const getSuggestion = (value) => {
-    if (!value || !Array.isArray(images)) return '';
+  const getSuggestion = (value) => {
+    if (!value || !Array.isArray(images) || images.length === 0) {
+      console.log('No images or value for suggestion');  // Логирование
+      return '';
+    }
     const lowerValue = value.toLowerCase();
     const matchingSuggestion = images
       .map(img => img.alt.toLowerCase())
       .find(alt => alt.startsWith(lowerValue) && alt !== lowerValue);
+    console.log('Suggestion for', value, ':', matchingSuggestion);  // Логирование
     return matchingSuggestion ? matchingSuggestion.slice(value.length) : '';
   };
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
-const handleChange = (e) => {
-  setSearchTerm(e.target.value);
-} // фукция для обработки изменения в поле поиска
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (inputRef.current && !inputRef.current.contains(e.target)) {
+        setSearchTerm('');
+      }
+    };
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, [setSearchTerm]);
 
+  const handleChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
-const handleKeyDown = (e) => {
+  const handleKeyDown = (e) => {
+    const suggestion = getSuggestion(searchTerm);
+    if ((e.key === 'Tab' || e.key === 'Enter') && suggestion) {
+      e.preventDefault();
+      setSearchTerm(searchTerm + suggestion);
+    } else if (e.key === 'Escape') {
+      setSearchTerm('');
+    }
+  };
+
   const suggestion = getSuggestion(searchTerm);
-  if ((e.key === 'Tab' || e.key === 'Enter') && suggestion) {
-    e.preventDefault();
-    setSearchTerm(searchTerm + suggestion);
-  }
-};
-
-const suggestion = getSuggestion(searchTerm);
-const placeholder = suggestion ?  searchTerm + suggestion : "Поиск по описанию...";
 
   return (
     <div className="search">
       <div className="search-input-container">
-        <input ref={inputRef}
-          type='text'
-          placeholder={placeholder}
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder="Поиск по описанию..."
           value={searchTerm}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          className={`search-input ${isDarkMode ? "dark" : "light"}`
-          }
+          className={`search-input ${isDarkMode ? "dark" : "light"}`}
         />
+        <button className="clear" type="button" onClick={() => setSearchTerm('')}>Очистить</button>
         {suggestion && (
-          <span className="search-suggestion">
+          <span className="search-suggestion" style={{ opacity: 0.5, position: 'absolute', left: '10px', top: '5px' }}>  {/* Добавьте inline-стиль для видимости */}
             {searchTerm}{suggestion}
           </span>
-          )}
+        )}
       </div>
     </div>
   );
-};
+});
 
 export default SearchComponent;

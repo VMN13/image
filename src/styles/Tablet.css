@@ -242,6 +242,7 @@
     border-radius: 25px;
     padding: 25px;
     background-color: rgba(0, 0, 0, 0.5);
+    margin: 80px;
   }
 
   .page-info {
@@ -479,4 +480,29 @@
     padding-bottom: 15px;
     font-weight: bold;
   }
+
+
+
+
+.Pagination-button.light[disabled] {
+  background-color: rgb(244, 1, 1);
+  border-radius: 5px;
+  height: 30px;
+  width: 100px;
+  margin: auto;
+  transition: 1s ease-in-out;
+}
+
+.Pagination-button.dark[disabled] {
+  background-color: rgba(244, 4, 4, 0.5);
+  color: rgb(249, 3, 3);
+  border-radius: 5px;
+  height: 30px;
+  width: 100px;
+  margin: auto;
+  transition: 1s ease-in-out;
+}
+
+
+
 }

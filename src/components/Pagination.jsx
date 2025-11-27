@@ -1,44 +1,59 @@
 import React from "react";
 import { useTheme } from "./ThemeContext";
-  
-const Pagination = ({currentPage, totalPages, onPageChange }) => {
-const { isDarkMode } = useTheme();
+  import '../data/images';
+
+
+
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  const { isDarkMode } = useTheme();
   console.log('Pagination рендерится, currentPage:', currentPage, 'totalPages:', totalPages);
 
   const goToPrevious = () => {
-    console.log('Клик на прерыдущую');
+    console.log('Клик на предыдущую');
     onPageChange(currentPage - 1);
-  }
+  };
 
-
-
-
-
-const goToNext = () => {
-  console.log('Клик на следующую');
-  onPageChange(currentPage + 1);
-}
-
-
+  const goToNext = () => {
+    console.log('Клик на следующую');
+    onPageChange(currentPage + 1);
+  };
 
   return (
     <div className='Pagination'>
-      <button className={`Pagination-button ${isDarkMode ? 'dark' : 'light'}`} onClick={goToPrevious} disabled={currentPage === 1}>◀</button>
+      <button 
+        className={`Pagination-button ${isDarkMode ? 'dark' : 'light'}`} 
+        onClick={goToPrevious} 
+        disabled={currentPage === 1}
+      >
+        ◀
+      </button>
       
-      {Array.from({length: totalPages}, (_, index) => (
-        <button key={index + 1}
-          onClick={() => {
-            console.log('Клик на страницу', index + 1);
-            onPageChange(index + 1);
-          }}
-        >
-          {index + 1}
-        </button>
-      ))}
+      {Array.from({ length: totalPages }, (_, index) => {
+        const pageNum = index + 1;
+        return (
+          <button 
+            key={pageNum}
+            className={`Pagination-button ${isDarkMode ? 'dark' : 'light'} ${pageNum === currentPage ? 'active' : ''}`} // Добавлен класс для выделения текущей страницы
+            onClick={() => {
+              console.log('Клик на страницу', pageNum);
+              onPageChange(pageNum);
+            }}
+            disabled={pageNum === currentPage} // Опционально: отключает текущую страницу
+          >
+            {pageNum}
+          </button>
+        );
+      })}
 
-      <button className={`Pagination-button ${isDarkMode ? 'dark' : 'light'}`} onClick={goToNext} disabled={currentPage === totalPages}>▶</button>
+      <button 
+        className={`Pagination-button ${isDarkMode ? 'dark' : 'light'}`} 
+        onClick={goToNext} 
+        disabled={currentPage === totalPages}
+      >
+        ▶
+      </button>
     </div>
-  )
-}
+  );
+};
 
 export default Pagination;

@@ -30,7 +30,14 @@ const SearchComponent = observer(({
 
   useEffect(() => {
     const handleClick = (e) => {
-      if (inputRef.current && !inputRef.current.contains(e.target)) {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(e.target) &&
+        !e.target.closet('.Pagination') &&
+        !e.target.closet('.buttons-favorites') &&
+        !e.target.closet('.search') &&
+        !e.target.closet('.Main')
+      ){
         setSearchTerm('');
       }
     };

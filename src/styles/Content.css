@@ -29,6 +29,32 @@ img.fade-in {
   }
 }
 
+
+.Pagination-button.light[disabled] {
+  background-color: rgb(244, 1, 1);
+  border-radius: 5px;
+  height: 30px;
+  width: 100px;
+  margin: auto;
+  transition: 1s ease-in-out;
+}
+
+.Pagination-button.dark[disabled] {
+  background-color: rgba(244, 4, 4, 0.5);
+  color: rgb(249, 3, 3);
+  border-radius: 5px;
+  height: 30px;
+  width: 100px;
+  margin: auto;
+  transition: 1s ease-in-out;
+}
+
+
+
+
+
+
+
 .action-button {
   background: rgba(255, 255, 255, 0.8);
   border: none;

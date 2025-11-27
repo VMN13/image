@@ -22,6 +22,7 @@ class GalleryStore {
       filteredImages: computed,
       totalPages: computed,
       currentImages: computed,
+     
       setFilterMode: action,
       toggleFavorite: action,
       toggleDislike: action,
@@ -34,7 +35,6 @@ class GalleryStore {
     this.loadFromLocalStorage();
   }
 
-  // Все методы — стрелочные функции для сохранения this
   loadFromLocalStorage = () => {
     try {
       this.favorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -73,18 +73,15 @@ class GalleryStore {
   };
 
   setSearchTerm = (term) => {
-    console.log('Setting searchTerm:', term);  // Для отладки
+    console.log('Setting searchTerm:', term);
     this.searchTerm = term;
     this.currentPage = 1;
   };
 
-  setCurrentPage = (page) => {
-    this.currentPage = page;
-  };
-
   get filteredImages() {
+    console.log('filteredImages: images from import:', images);
     let imagesFiltered = images;
-    console.log('Initial images count:', images.length);
+    console.log('filteredImages: Initial count:', images.length);
 
     if (this.currentSection !== 'all') {
       imagesFiltered = imagesFiltered.filter(image => image.category === this.currentSection);
@@ -104,19 +101,26 @@ class GalleryStore {
       imagesFiltered = imagesFiltered.filter(image => this.dislikes.includes(image.id));
     }
 
-    console.log('After mode filter:', imagesFiltered.length);
+    console.log('filteredImages: After filters, count:', imagesFiltered.length);
     return imagesFiltered;
   }
+
+
 
   get totalPages() {
     return Math.ceil(this.filteredImages.length / this.itemsPerPage);
   }
-
+  // Computed для currentImages (текущие изображения на странице)
   get currentImages() {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    return this.filteredImages.slice(startIndex, endIndex);
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    return this.filteredImages.slice(start, end);
   }
+  setCurrentPage(page) {
+    this.currentPage = page;
+  }
+
+
 
   isFavorite = (id) => {
     return this.favorites.includes(id);

@@ -104,3 +104,107 @@
     font-size: 16px;
   }
 }
+
+
+/* Существующие стили остаются без изменений */
+
+/* Стили для дублирующего (floating) плеера */
+.floating-player {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 250px; /* Компактная ширина */
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* Чтобы был поверх всего */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+}
+
+.floating-player.dark {
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+}
+
+.close-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s;
+}
+
+.close-button:hover {
+  color: #000;
+}
+
+.floating-player.dark .close-button:hover {
+  color: #fff;
+}
+
+.floating-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.floating-control-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+  transition: background 0.2s;
+}
+
+.floating-control-button:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.floating-player.dark .floating-control-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.floating-timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 5px;
+}
+
+.floating-timer span {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.floating-seek-bar {
+  width: 100%;
+  height: 5px;
+  background: #ddd;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+}
+
+.floating-player.dark .floating-seek-bar {
+  background: #555;
+}
+
+/* Мобильная адаптация для floating плеера */
+@media (max-width: 768px) {
+  .floating-player {
+    width: 200px;
+    bottom: 10px;
+    right: 10px;
+  }
+}

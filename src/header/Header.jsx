@@ -31,7 +31,7 @@ const Header = () => {
       onClick={handleShowAllPhotos}
       style={{ cursor: 'pointer' }} // Добавим курсор-руку для наглядности
     >
-      <div className="header">
+      <div className={`header ${isDarkMode ? "dark" : "light"}`}>
         <h1 className="h1">Image Gallery</h1>
         {/* Вешаем отдельный обработчик на кнопку, чтобы предотвратить всплытие */}
         <button className={`Mode ${isDarkMode ? "light" : "dark"}`} onClick={handleThemeToggle}>

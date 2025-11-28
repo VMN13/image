@@ -110,7 +110,7 @@ const CombinedContent = observer(() => {
         
         <div className="controls-wrapper">
           <PhotoCounter />
-           <AudioPlayer />
+           
           <SearchComponent 
             searchTerm={galleryStore.searchTerm} 
             setSearchTerm={galleryStore.setSearchTerm}  
@@ -155,7 +155,7 @@ const CombinedContent = observer(() => {
         <div className="content">
           <div className="section"></div>
           <Pagination currentPage={galleryStore.currentPage} totalPages={galleryStore.totalPages} onPageChange={handlePageChange} />
-          <div className="Main">
+          <div className={`Main ${isDarkMode ? 'dark' : 'light'}`}>
             {galleryStore.currentImages.length > 0 ? (
               galleryStore.currentImages.map((image) => (
                 <div className="first_block" key={image.id}>
@@ -230,7 +230,9 @@ const CombinedContent = observer(() => {
           image={modalImage}
           shareImageUrl={shareImageUrl}
         />
+   <AudioPlayer />     
       </div>
+   
     </>
   );
 });

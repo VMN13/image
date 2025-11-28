@@ -5,10 +5,10 @@ import '../styles/AudioPlayer.css';
 
 // Вам нужно будет заменить эти URL на пути к вашим аудиофайлам
 const soundUrls = {
-  sea: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav', // Пример URL
-  forest: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav', // Пример URL
-  rain: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav', // Пример URL
-  calm: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav', // Пример URL
+  sea: '/sounds/water_ocean_waves_rocks_light_003.mp3', // Океанские волны
+  forest: '/sounds/les.mp3', // Лесные звуки
+  rain: '/sounds/deti-online.com_-_dozhd.mp3', // Дождь
+  calm: 'https://www.soundjay.com/misc/sounds/wind-chimes-1.wav', // Спокойные звуки (ветер в колоколах)
 };
 
 const soundNames = {
@@ -27,6 +27,8 @@ const AudioPlayer = () => {
   const [currentSound, setCurrentSound] = useState(null);
   const [playbackTime, setPlaybackTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [showFloatingPlayer, setShowFloatingPlayer] = useState(false);
+
 
   // Форматирование времени в MM:SS
   const formatTime = (time) => {
@@ -60,6 +62,7 @@ const AudioPlayer = () => {
       if (currentSound === sound && !isPlaying) {
         audioRef.current.play();
         setIsPlaying(true);
+        setShowFloatingPlayer(true);
         return;
       }
 
@@ -68,6 +71,7 @@ const AudioPlayer = () => {
       audioRef.current.play();
       setCurrentSound(sound);
       setIsPlaying(true);
+      setShowFloatingPlayer(true);
     }
   };
 
@@ -84,6 +88,7 @@ const AudioPlayer = () => {
       audioRef.current.currentTime = 0;
       setIsPlaying(false);
       setPlaybackTime(0);
+      setShowFloatingPlayer(false);
     }
   };
 
@@ -91,7 +96,22 @@ const AudioPlayer = () => {
     setDuration(audioRef.current.duration);
   };
 
+
+  const handleSeek = (e) => {
+    const newTime = e.target.value;
+    audioRef.current.currentTime = newTime;
+    setPlaybackTime(newTime);
+  };
+  
+
+
+const handleCloseFloatingPlayer = () => {
+  handleStop();
+}
+
+
   return (
+    <>
     <div className={`audio-player ${isDarkMode ? 'dark' : 'light'}`}>
       <audio
         ref={audioRef}
@@ -121,9 +141,38 @@ const AudioPlayer = () => {
       </div>
 
       <div className={`timer-display ${isDarkMode ? 'dark' : 'light'}`}>
-        {formatTime(playbackTime)} / {formatTime(duration)}
+        <span>{formatTime(playbackTime)}</span>
+        <input type='range' min='0' max={duration || 0} value={playbackTime} onChange={handleSeek}
+          className={`seek-bar ${isDarkMode ? 'dark' : 'light'} `}
+          disabled={!duration}
+          />
+ 
       </div>
     </div>
+
+   
+    {showFloatingPlayer && (
+      <div className={`floating-player ${isDarkMode ? 'dark' : 'light'}`}>
+        <button className='close-button'
+          onClick={handleCloseFloatingPlayer}
+        >X</button> 
+         <div className='floating-controls'>
+            <button className='floating-control-button' onClick={isPlaying ? handlePause : () => handlePlay(currentSound)}>
+              {isPlaying ? '⏸️' : '▶️'}
+            </button>
+            <button className='floating-control-button' onClick={handleStop}>
+              ⏹️
+            </button>
+          </div> 
+          <span>{formatTime(playbackTime)}
+            <input type='range' min='0' max={duration || 0} value={playbackTime} onChange={handleSeek}
+              className={`floating-seek-bar ${isDarkMode ? 'dark' : 'light'} `}
+              disabled={!duration}
+              />
+          </span>
+      </div>
+    )}
+    </>
   );
 };
 

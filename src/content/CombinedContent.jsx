@@ -9,6 +9,7 @@ import { useTheme } from "../components/ThemeContext";
 import ImageModal from "../components/ImagbeModal";
 import PhotoCounter from "../components/PhotoCounter";
 import SearchComponent from "../components/SearchComponent";
+import AudioPlayer from "../components/AudioPlayer";
 import "../styles/Content.css";
 import "../styles/Tablet.css";
 import "../styles/Desktop.css";
@@ -109,6 +110,7 @@ const CombinedContent = observer(() => {
         
         <div className="controls-wrapper">
           <PhotoCounter />
+           <AudioPlayer />
           <SearchComponent 
             searchTerm={galleryStore.searchTerm} 
             setSearchTerm={galleryStore.setSearchTerm}  

@@ -4,6 +4,7 @@ import "../styles/Header.css";
 import '../styles/HeaderTablet.css';
 import '../styles/HeaderDesktop.css';
 
+
 const Header = () => {
   const { isDarkMode, toggleTheme } = useTheme();
 
@@ -31,7 +32,7 @@ const Header = () => {
       style={{ cursor: 'pointer' }} // Добавим курсор-руку для наглядности
     >
       <div className="header">
-        <h1>Image Gallery</h1>
+        <h1 className="h1">Image Gallery</h1>
         {/* Вешаем отдельный обработчик на кнопку, чтобы предотвратить всплытие */}
         <button className={`Mode ${isDarkMode ? "light" : "dark"}`} onClick={handleThemeToggle}>
           {isDarkMode ? "Light Mode" : "Dark Mode"}

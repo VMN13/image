@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { useTheme } from '../components/ThemeContext';
 import '../styles/AudioPlayer.css';
 
-
-// Вам нужно будет заменить эти URL на пути к вашим аудиофайлам
+// ... (soundUrls и soundNames остаются без изменений)
 const soundUrls = {
   sea: '/sounds/water_ocean_waves_rocks_light_003.mp3', // Океанские волны
   forest: '/sounds/les.mp3', // Лесные звуки
@@ -17,7 +17,6 @@ const soundNames = {
   rain: 'Дождь',
   calm: 'Спокойная погода',
 };
-
 const AudioPlayer = () => {
   const { isDarkMode } = useTheme();
   const audioRef = useRef(null);
@@ -27,8 +26,15 @@ const AudioPlayer = () => {
   const [currentSound, setCurrentSound] = useState(null);
   const [playbackTime, setPlaybackTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(1); // Новое состояние для громкости (0-1)
   const [showFloatingPlayer, setShowFloatingPlayer] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [floatingPosition, setFloatingPosition] = useState({ top: 0, left: 20 }); // Новое состояние для позиции дублирующего плеера
+  const [isDragging, setIsDragging] = useState(false); // Для отслеживания перетаскивания
+  const dragStartRef = useRef({ x: 0, y: 0 }); // Начальная позиция мыши/тача
 
+  // Список звуков для переключения
+  const soundKeys = Object.keys(soundUrls);
 
   // Форматирование времени в MM:SS
   const formatTime = (time) => {
@@ -50,28 +56,31 @@ const AudioPlayer = () => {
     return () => clearInterval(intervalRef.current);
   }, [isPlaying]);
 
+  // Синхронизация громкости с аудио
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  }, [volume]);
+
   const handlePlay = (sound) => {
     if (audioRef.current) {
-      // Если играем другой звук, останавливаем его
       if (currentSound && currentSound !== sound) {
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
       }
-      
-      // Если текущий звук уже на паузе, продолжаем
       if (currentSound === sound && !isPlaying) {
         audioRef.current.play();
         setIsPlaying(true);
         setShowFloatingPlayer(true);
         return;
       }
-
-      // Воспроизводим новый звук
       audioRef.current.src = soundUrls[sound];
       audioRef.current.play();
       setCurrentSound(sound);
       setIsPlaying(true);
       setShowFloatingPlayer(true);
+      setIsMinimized(false);
     }
   };
 
@@ -89,6 +98,7 @@ const AudioPlayer = () => {
       setIsPlaying(false);
       setPlaybackTime(0);
       setShowFloatingPlayer(false);
+      setIsMinimized(false);
     }
   };
 
@@ -96,82 +106,225 @@ const AudioPlayer = () => {
     setDuration(audioRef.current.duration);
   };
 
-
   const handleSeek = (e) => {
     const newTime = e.target.value;
     audioRef.current.currentTime = newTime;
     setPlaybackTime(newTime);
   };
-  
 
+  const handleVolumeChange = (e) => {
+    setVolume(e.target.value);
+  };
 
-const handleCloseFloatingPlayer = () => {
-  handleStop();
-}
+  // Функции для переключения звуков
+  const handlePrev = () => {
+    const currentIndex = soundKeys.indexOf(currentSound);
+    const prevIndex = (currentIndex - 1 + soundKeys.length) % soundKeys.length;
+    handlePlay(soundKeys[prevIndex]);
+  };
 
+  const handleNext = () => {
+    const currentIndex = soundKeys.indexOf(currentSound);
+    const nextIndex = (currentIndex + 1) % soundKeys.length;
+    handlePlay(soundKeys[nextIndex]);
+  };
+
+  // Функции для перетаскивания (ПК)
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    dragStartRef.current = { x: e.clientX - floatingPosition.left, y: e.clientY - floatingPosition.top };
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    const newLeft = e.clientX - dragStartRef.current.x;
+    const newTop = e.clientY - dragStartRef.current.y;
+    // Ограничение в пределах экрана
+    const maxLeft = window.innerWidth - 250; // Ширина плеера
+    const maxTop = window.innerHeight - 100; // Высота плеера
+    setFloatingPosition({
+      left: Math.max(0, Math.min(newLeft, maxLeft)),
+      top: Math.max(0, Math.min(newTop, maxTop)),
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // Функции для перетаскивания (сенсорные экраны)
+  const handleTouchStart = (e) => {
+    setIsDragging(true);
+    const touch = e.touches[0];
+    dragStartRef.current = { x: touch.clientX - floatingPosition.left, y: touch.clientY - floatingPosition.top };
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging) return;
+    const touch = e.touches[0];
+    const newLeft = touch.clientX - dragStartRef.current.x;
+    const newTop = touch.clientY - dragStartRef.current.y;
+    const maxLeft = window.innerWidth - 250;
+    const maxTop = window.innerHeight - 100;
+    setFloatingPosition({
+      left: Math.max(0, Math.min(newLeft, maxLeft)),
+      top: Math.max(0, Math.min(newTop, maxTop)),
+    });
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
+
+  // Добавляем глобальные обработчики для mouse/touch move/up
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener('touchmove', handleTouchMove);
+      document.addEventListener('touchend', handleTouchEnd);
+    } else {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+    }
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [isDragging]);
+
+  const handleCloseFloatingPlayer = () => {
+    handleStop();
+  };
+
+  const toggleMinimize = () => {
+    setIsMinimized(!isMinimized);
+  };
 
   return (
     <>
-    <div className={`audio-player ${isDarkMode ? 'dark' : 'light'}`}>
-      <audio
-        ref={audioRef}
-        onLoadedMetadata={handleLoadedMetadata}
-        onEnded={() => setIsPlaying(false)}
-      />
-      
-      <div className="sound-buttons">
-        {Object.keys(soundUrls).map((sound) => (
-          <button
-            key={sound}
-            className={`sound-button ${isDarkMode ? 'dark' : 'light'} ${currentSound === sound ? 'active' : ''}`}
-            onClick={() => handlePlay(sound)}
-          >
-            {soundNames[sound]}
+      {/* Оригинальный плеер */}
+      <div className={`audio-player ${isDarkMode ? 'dark' : 'light'}`}>
+        <audio
+          ref={audioRef}
+          onLoadedMetadata={handleLoadedMetadata}
+          onEnded={() => {
+            setIsPlaying(false);
+            setShowFloatingPlayer(false);
+          }}
+        />
+        
+        <div className="sound-buttons">
+          {Object.keys(soundUrls).map((sound) => (
+            <button
+              key={sound}
+              className={`sound-button ${isDarkMode ? 'dark' : 'light'} ${currentSound === sound ? 'active' : ''}`}
+              onClick={() => handlePlay(sound)}
+            >
+              {soundNames[sound]}
+            </button>
+          ))}
+        </div>
+
+        <div className="controls">
+          <button className={`control-button ${isDarkMode ? 'dark' : 'light'}`} onClick={isPlaying ? handlePause : () => handlePlay(currentSound || 'sea')}>
+            {isPlaying ? '⏸️' : '▶️'}
           </button>
-        ))}
-      </div>
+          <button className={`control-button ${isDarkMode ? 'dark' : 'light'}`} onClick={handleStop}>
+            ⏹️
+          </button>
+        </div>
 
-      <div className="controls">
-        <button className={`control-button ${isDarkMode ? 'dark' : 'light'}`} onClick={isPlaying ? handlePause : () => handlePlay(currentSound || 'sea')}>
-          {isPlaying ? '⏸️' : '▶️'}
-        </button>
-        <button className={`control-button ${isDarkMode ? 'dark' : 'light'}`} onClick={handleStop}>
-          ⏹️
-        </button>
-      </div>
-
-      <div className={`timer-display ${isDarkMode ? 'dark' : 'light'}`}>
-        <span>{formatTime(playbackTime)}</span>
-        <input type='range' min='0' max={duration || 0} value={playbackTime} onChange={handleSeek}
-          className={`seek-bar ${isDarkMode ? 'dark' : 'light'} `}
-          disabled={!duration}
+        <div className={`timer-display ${isDarkMode ? 'dark' : 'light'}`}>
+          <span>{formatTime(playbackTime)}</span>
+          <input 
+            type='range' 
+            min='0' 
+            max={duration || 0} 
+            value={playbackTime} 
+            onChange={handleSeek}
+            className={`seek-bar ${isDarkMode ? 'dark' : 'light'}`}
+            disabled={!duration}
           />
- 
-      </div>
-    </div>
+        </div>
 
-   
-    {showFloatingPlayer && (
-      <div className={`floating-player ${isDarkMode ? 'dark' : 'light'}`}>
-        <button className='close-button'
-          onClick={handleCloseFloatingPlayer}
-        >X</button> 
-         <div className='floating-controls'>
-            <button className='floating-control-button' onClick={isPlaying ? handlePause : () => handlePlay(currentSound)}>
+        {/* Новый ползунок громкости в основном плеере */}
+        <div className={`volume-control ${isDarkMode ? 'dark' : 'light'}`}>
+          <label>Громкость:</label>
+          <input 
+            type='range' 
+            min='0' 
+            max='1' 
+            step='0.1' 
+            value={volume} 
+            onChange={handleVolumeChange}
+            className={`volume-bar ${isDarkMode ? 'dark' : 'light'}`}
+          />
+        </div>
+      </div>
+
+      {/* Дублирующий (floating) плеер */}
+      {showFloatingPlayer && ReactDOM.createPortal(
+        <div 
+          className={`floating-player ${isDarkMode ? 'dark' : 'light'} ${isMinimized ? 'minimized' : ''} ${isDragging ? 'dragging' : ''}`}
+          style={{ top: floatingPosition.top, left: floatingPosition.left }}
+          onMouseDown={handleMouseDown}
+          onTouchStart={handleTouchStart}
+        >
+          <button className="close-button" onClick={handleCloseFloatingPlayer}>✕</button>
+          <button className="minimize-button" onClick={toggleMinimize}>
+            {isMinimized ? '⤢' : '⤡'}
+          </button>
+          {!isMinimized && (
+            <>
+              <div className="floating-controls">
+                <button className="floating-control-button" onClick={handlePrev}>◀</button> {/* Предыдущий звук */}
+                <button className="floating-control-button" onClick={isPlaying ? handlePause : () => handlePlay(currentSound)}>
+                  {isPlaying ? '⏸️' : '▶️'}
+                </button>
+                <button className="floating-control-button" onClick={handleStop}>
+                  ⏹️
+                </button>
+                <button className="floating-control-button" onClick={handleNext}>▶</button> {/* Следующий звук */}
+              </div>
+              <div className="floating-timer">
+                <span>{formatTime(playbackTime)}</span>
+                <input 
+                  type='range' 
+                  min='0' 
+                  max={duration || 0} 
+                  value={playbackTime} 
+                  onChange={handleSeek}
+                  className="floating-seek-bar"
+                  disabled={!duration}
+                />
+              </div>
+              {/* Новый ползунок громкости в дублирующем плеере */}
+              <div className="floating-volume">
+                <input 
+                  type='range' 
+                  min='0' 
+                  max='1' 
+                  step='0.1' 
+                  value={volume} 
+                  onChange={handleVolumeChange}
+                  className="floating-volume-bar"
+                />
+              </div>
+            </>
+          )}
+          {isMinimized && (
+            <button className="floating-control-button minimized-play" onClick={isPlaying ? handlePause : () => handlePlay(currentSound)}>
               {isPlaying ? '⏸️' : '▶️'}
             </button>
-            <button className='floating-control-button' onClick={handleStop}>
-              ⏹️
-            </button>
-          </div> 
-          <span>{formatTime(playbackTime)}
-            <input type='range' min='0' max={duration || 0} value={playbackTime} onChange={handleSeek}
-              className={`floating-seek-bar ${isDarkMode ? 'dark' : 'light'} `}
-              disabled={!duration}
-              />
-          </span>
-      </div>
-    )}
+          )}
+        </div>,
+        document.body
+      )}
     </>
   );
 };

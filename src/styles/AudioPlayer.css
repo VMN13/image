@@ -1,5 +1,3 @@
-/* styles/AudioPlayer.css */
-
 .audio-player {
   display: flex;
   flex-direction: column;
@@ -106,19 +104,17 @@
 }
 
 
-/* Существующие стили остаются без изменений */
-
-/* Стили для дублирующего (floating) плеера */
+/* Стили для дублирующего (fixed) плеера вверху */
 .floating-player {
-  position: fixed;
-  bottom: 20px;
+  position: fixed; /* Фиксирован вверху */
+  top: 0; /* Липнет к верху экрана */
   right: 20px;
-  width: 250px; /* Компактная ширина */
+  width: 250px;
   padding: 10px;
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1000; /* Чтобы был поверх всего */
+  z-index: 1000;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -129,6 +125,14 @@
 .floating-player.dark {
   background-color: rgba(0, 0, 0, 0.9);
   color: white;
+}
+
+.floating-player.minimized {
+  width: 60px;
+  height: 60px;
+  padding: 5px;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .close-button {
@@ -148,6 +152,26 @@
 }
 
 .floating-player.dark .close-button:hover {
+  color: #fff;
+}
+
+.minimize-button {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s;
+}
+
+.minimize-button:hover {
+  color: #000;
+}
+
+.floating-player.dark .minimize-button:hover {
   color: #fff;
 }
 
@@ -200,11 +224,87 @@
   background: #555;
 }
 
-/* Мобильная адаптация для floating плеера */
+.minimized-play {
+  font-size: 24px;
+  margin: auto;
+}
+
+/* Мобильная адаптация: плеер занимает всю ширину вверху */
 @media (max-width: 768px) {
   .floating-player {
-    width: 200px;
-    bottom: 10px;
+    width: calc(100vw - 20px); /* Почти вся ширина экрана */
+    top: 0;
     right: 10px;
+    left: 10px; /* Центрируем */
   }
+  .floating-player.minimized {
+    width: 50px;
+    height: 50px;
+    top: 0;
+    right: 10px;
+    left: auto; /* Возвращаем к правому краю */
+  }
+}
+
+
+/* Стили для громкости в основном плеере */
+.volume-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.volume-control label {
+  font-size: 14px;
+  color: #333;
+}
+
+.Content.dark .volume-control label {
+  color: #f0f0f0;
+}
+
+.volume-bar {
+  width: 80%;
+  height: 5px;
+  background: #ddd;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+}
+
+.Content.dark .volume-bar {
+  background: #555;
+}
+
+/* Стили для громкости в дублирующем плеере */
+.floating-volume {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.floating-volume-bar {
+  width: 80%;
+  height: 5px;
+  background: #ddd;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+}
+
+.floating-player.dark .floating-volume-bar {
+  background: #555;
+}
+
+/* Стили для перетаскивания */
+.floating-player {
+  cursor: move; /* Курсор для перетаскивания */
+}
+
+.floating-player.dragging {
+  opacity: 0.8; /* Полупрозрачность при перетаскивании */
+  user-select: none; /* Запрет выделения текста */
 }

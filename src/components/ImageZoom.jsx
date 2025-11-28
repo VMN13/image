@@ -1,20 +1,17 @@
-import React, {useState} from "react";
+import React from "react";
+import galleryStore from "../stores/GalleryStore";
 import "../styles/ImageZoom.css";
 
-const ImageZoom = ({ onZoomChange }) => {
-  const [zomLevel, setZoomLevel] = useState('normal');
-
+const ImageZoom = () => {
 
   const handleZoomIn = () => {
-    setZoomLevel('zoomed');
-    onZoomChange('zoomed');
+    galleryStore.setZoomLevel('zoomed');
   };
 
 
 
     const handleZoomOut = () => {
-      setZoomLevel('normal');
-      onZoomChange('normal');
+      galleryStore.setZoomLevel('normal');
     };
 
 
@@ -22,7 +19,7 @@ return (
   <div className="image-zoom-controls">
     <button 
       onClick={handleZoomIn}
-      disabled={zomLevel === 'zoomed'}
+      disabled={galleryStore.zoomLevel === 'zoomed'}
       className="zoom-button zoom-out"
       title="Увеличить блоки изображений"
       >
@@ -30,7 +27,7 @@ return (
     </button>
     <button 
       onClick={handleZoomOut}
-      disabled={zomLevel === 'normal'}
+      disabled={galleryStore.zoomLevel === 'normal'}
       className="zoom-button zoom-in"
       title="Уменьшить блоки изображений"
       >
@@ -38,8 +35,6 @@ return (
     </button>
   </div>
 )};
-
-
 
 export default ImageZoom;
 

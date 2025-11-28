@@ -9,7 +9,7 @@ class GalleryStore {
   searchTerm = '';
   currentPage = 1;
   itemsPerPage = 9;
-
+  zoomLevel = 'normal';
   constructor() {
     makeObservable(this, {
       favorites: observable,
@@ -22,7 +22,6 @@ class GalleryStore {
       filteredImages: computed,
       totalPages: computed,
       currentImages: computed,
-     
       setFilterMode: action,
       toggleFavorite: action,
       toggleDislike: action,
@@ -30,6 +29,9 @@ class GalleryStore {
       setSearchTerm: action,
       setCurrentPage: action,
       loadFromLocalStorage: action,
+      saveToLocalStorage: action,
+      setZoomLevel: action,
+      
     });
 
     this.loadFromLocalStorage();
@@ -43,6 +45,23 @@ class GalleryStore {
       console.error('Error parsing from localStorage:', error);
     }
   };
+
+  saveToLocalStorage = () => {
+    localStorage.setItem('favorites', JSON.stringify(this.favorites));
+    localStorage.setItem('dislikes', JSON.stringify(this.dislikes));
+  };
+  // resetFilters = () => {
+  //   this.filterMode = 'all';
+  //   this.currentSection = 'all';
+  //   this.searchTerm = '';
+  //   this.currentPage = 1;
+  //   };
+
+
+setZoomLevel = (level) => {
+  this.zoomLevel = level;
+}
+
 
   setFilterMode = (mode) => {
     this.filterMode = mode;
@@ -71,6 +90,12 @@ class GalleryStore {
     this.currentSection = section;
     this.currentPage = 1;
   };
+
+
+  
+
+
+
 
   setSearchTerm = (term) => {
     console.log('Setting searchTerm:', term);

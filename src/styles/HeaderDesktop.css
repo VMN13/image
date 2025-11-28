@@ -1,0 +1,30 @@
+@media (min-width: 1024px) {
+  .Header {
+    font-size: 1.9rem;
+    letter-spacing: 0.7rem;
+  }
+
+  .header {
+    padding: 0 60px;
+  }
+
+  h1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh;
+  transition: 1s ease-in-out;
+  font-size: 3.5rem;
+  letter-spacing: 1rem;
+  }
+
+  .Mode.light,
+  .Mode.dark {
+    font-size: 20px;
+    padding: 12px 20px;
+  }
+
+  .Counter {
+    font-size: 22px;
+  }
+}

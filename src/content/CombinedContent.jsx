@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import galleryStore from "../stores/GalleryStore";
 import images from '../data/images';
-
+import Header from "../header/Header";
 import Pagination from "../components/Pagination";
 import LazyImage from "../components/LazyImage";
 import { useTheme } from "../components/ThemeContext";
 import ImageModal from "../components/ImagbeModal";
-import ImageZoom from "../components/ImageZoom";
 import PhotoCounter from "../components/PhotoCounter";
 import SearchComponent from "../components/SearchComponent";
 import "../styles/Content.css";
@@ -15,13 +14,15 @@ import "../styles/Tablet.css";
 import "../styles/Desktop.css";
 
 
-
 const CombinedContent = observer(() => {
-  const [modalImage, setModalImage] = useState(null);  // состояние модального окна
-  const [isModalOpen, setIsModalOpen] = useState(false);  // состояние модального окна
-  const [zoomLevel, setZoomLevel] = useState('normal'); // состояние увеличения
-  const [showActionButtons, setShowActionButtons] = useState({});  // объект для хранения состояний кнопок
-  const [actionTimeouts, setActionTimeouts] = useState({});  // объект для хранения таймаутов кнопок
+  const [modalImage, setModalImage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Локальное состояние зума больше не нужно, оно в galleryStore
+  // const [zoomLevel, setZoomLevel] = useState('normal'); 
+
+  const [showActionButtons, setShowActionButtons] = useState({});
+  const [actionTimeouts, setActionTimeouts] = useState({});
   const user = true;
   const { isDarkMode } = useTheme();
 
@@ -105,6 +106,7 @@ const CombinedContent = observer(() => {
   return (
     <>
       <div className={`Content ${isDarkMode ? 'dark' : 'light'}`}>
+        
         <div className="controls-wrapper">
           <PhotoCounter />
           <SearchComponent 
@@ -155,11 +157,11 @@ const CombinedContent = observer(() => {
             {galleryStore.currentImages.length > 0 ? (
               galleryStore.currentImages.map((image) => (
                 <div className="first_block" key={image.id}>
-                  <div className={`internal_content ${zoomLevel === 'zoomed' ? 'zoomed' : ''}`}>
+                  <div className={`internal_content ${galleryStore.zoomLevel === 'zoomed' ? 'zoomed' : ''}`}>
                     <LazyImage 
                       src={image.url} 
                       alt={image.alt}
-                      className={zoomLevel === 'zoomed' ? 'zoomed' : ''}
+                      className={galleryStore.zoomLevel === 'zoomed' ? 'zoomed' : ''}
                       onClick={() => openModal(image)} 
                     />
                     <div className="buttons-container">
@@ -175,12 +177,30 @@ const CombinedContent = observer(() => {
                           </div>
                         )}
                       </button>
-                      <ImageZoom onZoomChange={setZoomLevel} />
+                      
+                      {/* Кнопки зума теперь здесь */}
+                      <button 
+                        onClick={() => galleryStore.setZoomLevel('zoomed')}
+                        disabled={galleryStore.zoomLevel === 'zoomed'}
+                        className="zoom-button zoom-in"
+                        title="Увеличить"
+                      >
+                        ➕
+                      </button>
+                      <button 
+                        onClick={() => galleryStore.setZoomLevel('normal')}
+                        disabled={galleryStore.zoomLevel === 'normal'}
+                        className="zoom-button zoom-out"
+                        title="Уменьшить"
+                      >
+                        ➖
+                      </button>
+
                       <button className="favorite-button" onClick={() => galleryStore.toggleFavorite(image.id)}>
                         {galleryStore.isFavorite(image.id) ? '❤️' : '🤍'}
                       </button>
                       <button className="dislike-button" onClick={() => galleryStore.toggleDislike(image.id)}>
-                        {galleryStore.isDisliked(image.id) ? '❌' : '❌'}
+                        {galleryStore.isDisliked(image.id) ? '❤️' : '🤍'} 
                       </button>
                     </div>
                   </div>

@@ -1,0 +1,29 @@
+
+/* --- Стили для планшетов (ширина экрана 768px и выше) --- */
+
+@media (min-width: 768px) {
+  .Header {
+    font-size: 1.7rem;
+    letter-spacing: 0.6rem;
+  }
+
+  .header {
+    padding: 0 40px;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+  }
+
+  .Mode.light,
+  .Mode.dark {
+    font-size: 18px;
+    padding: 10px 16px;
+  }
+
+  .Counter {
+    font-size: 20px;
+  }
+}
+
+

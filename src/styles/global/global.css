@@ -19,15 +19,6 @@ html, body {
 }
 
 
-h1 {
-  display: flex;
-  font-size: 20px;
-  justify-content: center;
-  align-items: center;
-  height: 10vh;
-    transition: 1s ease-in-out;
-}
-
 h2 {
     transition: 1s ease-in-out;
 }
@@ -42,6 +33,11 @@ p {
   transform: translateY(20px);
   animation: fadeInUp 1s ease-out forwards;
   will-change: transform, opacity;
+}
+
+
+.Header {
+  cursor: pointer;
 }
 
 
@@ -64,13 +60,8 @@ p {
   height: 213px;
 }
 
-.controls-wrapper {
-      display: flex;
-    height: 29vh;
-    gap: 9px;
-    flex-direction: column;
-    
-}
+
+
 
 .search {
   display: flex;

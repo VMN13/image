@@ -73,7 +73,7 @@ const SearchComponent = observer(({
           onKeyDown={handleKeyDown}
           className={`search-input ${isDarkMode ? "dark" : "light"}`}
         />
-        <button className="clear" type="button" onClick={() => setSearchTerm('')}>Очистить</button>
+        <button className={`Clear ${isDarkMode ? 'dark' : 'light'} equal-width`}  type="button" onClick={() => setSearchTerm('')}>Очистить</button>
         {suggestion && (
           <span className="search-suggestion" style={{ opacity: 0.5, position: 'absolute', left: '10px', top: '5px' }}>  {/* Добавьте inline-стиль для видимости */}
             {searchTerm}{suggestion}

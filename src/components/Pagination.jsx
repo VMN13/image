@@ -4,15 +4,15 @@ import '../data/images';
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const { isDarkMode } = useTheme();
-  console.log('Pagination рендерится, currentPage:', currentPage, 'totalPages:', totalPages);
+  
 
   const goToPrevious = () => {
-    console.log('Клик на предыдущую');
+
     onPageChange(currentPage - 1);
   };
 
   const goToNext = () => {
-    console.log('Клик на следующую');
+ 
     onPageChange(currentPage + 1);
   };
 

@@ -1,8 +1,7 @@
 import { useTheme } from "../components/ThemeContext";
 import galleryStore from "../stores/GalleryStore";
 import "../styles/Header.css";
-import '../styles/HeaderTablet.css';
-import '../styles/HeaderDesktop.css';
+
 
 
 const Header = () => {

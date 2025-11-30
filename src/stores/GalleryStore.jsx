@@ -1,3 +1,4 @@
+// GalleryStore.js
 import { makeObservable, observable, action, computed } from 'mobx';
 import images from '../data/images';  // Убедитесь, что путь правильный
 
@@ -31,6 +32,8 @@ class GalleryStore {
       loadFromLocalStorage: action,
       saveToLocalStorage: action,
       setZoomLevel: action,
+      clearFavorites: action,
+      clearDislikes: action,
       
     });
 
@@ -50,6 +53,17 @@ class GalleryStore {
     localStorage.setItem('favorites', JSON.stringify(this.favorites));
     localStorage.setItem('dislikes', JSON.stringify(this.dislikes));
   };
+
+  clearFavorites = () => {
+    this.favorites = [];
+    localStorage.setItem('favorites', JSON.stringify(this.favorites));
+  };
+
+  clearDislikes = () => {
+    this.dislikes = [];
+    localStorage.setItem('dislikes', JSON.stringify(this.dislikes));
+  };
+
   // resetFilters = () => {
   //   this.filterMode = 'all';
   //   this.currentSection = 'all';
@@ -73,8 +87,12 @@ setZoomLevel = (level) => {
       this.favorites = this.favorites.filter(favId => favId !== id);
     } else {
       this.favorites = [...this.favorites, id];
+      // Удалить из dislikes, если там есть
+      if (this.dislikes.includes(id)) {
+        this.dislikes = this.dislikes.filter(dislikeId => dislikeId !== id);
+      }
     }
-    localStorage.setItem('favorites', JSON.stringify(this.favorites));
+    this.saveToLocalStorage();
   };
 
   toggleDislike = (id) => {
@@ -82,8 +100,12 @@ setZoomLevel = (level) => {
       this.dislikes = this.dislikes.filter(dislikeId => dislikeId !== id);
     } else {
       this.dislikes = [...this.dislikes, id];
+      // Удалить из favorites, если там есть
+      if (this.favorites.includes(id)) {
+        this.favorites = this.favorites.filter(favId => favId !== id);
+      }
     }
-    localStorage.setItem('dislikes', JSON.stringify(this.dislikes));
+    this.saveToLocalStorage();
   };
 
   setCurrentSection = (section) => {

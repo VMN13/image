@@ -38,12 +38,12 @@
 
 /* Изображение */
 .modal-image {
-  max-width: 100%; /* Ограничено контейнером */
+  max-width: 200vh; /* Ограничено контейнером */
   max-height: 100%; /* Ограничено контейнером */
   object-fit: contain; /* Сохраняет пропорции, не обрезает */
-  border-radius: 10px; /* Опционально, для стиля */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Тень для эффекта */
   will-change: transform;
+  border-radius: 20px;
 }
 
 

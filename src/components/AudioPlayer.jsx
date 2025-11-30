@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { useTheme } from '../components/ThemeContext';
-import '../styles/AudioPlayer.css';
+import '../styles/global/AudioPlayer.css';
 
 // ... (soundUrls и soundNames остаются без изменений)
 const soundUrls = {

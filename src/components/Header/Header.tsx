@@ -1,15 +1,13 @@
-import { useTheme } from "../components/ThemeContext";
-import galleryStore from "../stores/GalleryStore";
-import "../styles/Header.css";
+import React, { FC, MouseEvent } from "react";
+import { useTheme } from "../ThemeContext";
+import galleryStore from "../../stores/GalleryStore";
+import "./Header.css";
 
-
-
-const Header = () => {
+const Header: FC = () => {
   const { isDarkMode, toggleTheme } = useTheme();
 
-  const handleShowAllPhotos = () => {
+  const handleShowAllPhotos = (): void => {
     console.log("Клик по Header сработал! Сбрасываю фильтры...");
-    // Используем ФУНКЦИИ (set...) для изменения состояния в store
     galleryStore.setSearchTerm('');
     galleryStore.setCurrentSection('all');
     galleryStore.setFilterMode('all');
@@ -17,22 +15,19 @@ const Header = () => {
     console.log("Фильтры сброшены.");
   };
 
-  const handleThemeToggle = (event) => {
-    // Останавливаем всплытие, чтобы клик на кнопку не вызывал handleShowAllPhotos
+  const handleThemeToggle = (event: MouseEvent<HTMLButtonElement>): void => {
     event.stopPropagation();
     toggleTheme();
   };
  
   return (
-    // Вешаем обработчик клика на весь Header
     <div 
       className={`Header ${isDarkMode ? "dark" : "light"}`} 
       onClick={handleShowAllPhotos}
-      style={{ cursor: 'pointer' }} // Добавим курсор-руку для наглядности
+      style={{ cursor: 'pointer' }}
     >
       <div className={`header ${isDarkMode ? "dark" : "light"}`}>
         <h1 className="h1">Image Gallery</h1>
-        {/* Вешаем отдельный обработчик на кнопку, чтобы предотвратить всплытие */}
         <button className={`Mode ${isDarkMode ? "light" : "dark"}`} onClick={handleThemeToggle}>
           {isDarkMode ? "Light Mode" : "Dark Mode"}
         </button>              

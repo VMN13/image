@@ -1,40 +1,38 @@
-import React from "react";
-import { useTheme } from "./ThemeContext";
-import '../data/images';
+import React, { FC } from "react";
+import { useTheme } from "../ThemeContext";
 
-const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
+
+const Pagination: FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
   const { isDarkMode } = useTheme();
   
-
-  const goToPrevious = () => {
-
+  const goToPrevious = (): void => {
     onPageChange(currentPage - 1);
   };
 
-  const goToNext = () => {
- 
+  const goToNext = (): void => {
     onPageChange(currentPage + 1);
   };
 
-  // Функция для генерации массива страниц с эллипсисами
-  const getPageNumbers = () => {
-    const pages = [];
-    const maxVisible = 5; // Максимум видимых кнопок страниц (не считая prev/next). Можно настроить под мобильные (например, 3).
+  const getPageNumbers = (): (number | string)[] => {
+    const pages: (number | string)[] = [];
+    const maxVisible = 5;
 
     if (totalPages <= maxVisible) {
-      // Если страниц мало, показываем все
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
     } else {
-      // Логика с эллипсисами
-      pages.push(1); // Первая страница всегда
+      pages.push(1);
 
       if (currentPage > 3) {
-        pages.push('...'); // Эллипсис перед текущей группой
+        pages.push('...');
       }
 
-      // Диапазон вокруг текущей страницы
       const start = Math.max(2, currentPage - 1);
       const end = Math.min(totalPages - 1, currentPage + 1);
       for (let i = start; i <= end; i++) {
@@ -42,10 +40,10 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       }
 
       if (currentPage < totalPages - 2) {
-        pages.push('...'); // Эллипсис после текущей группы
+        pages.push('...');
       }
 
-      pages.push(totalPages); // Последняя страница всегда
+      pages.push(totalPages);
     }
 
     return pages;
@@ -73,13 +71,13 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         }
         return (
           <button 
-            key={page}
-            className={`Pagination-button ${isDarkMode ? 'dark' : 'light'} ${page === currentPage ? 'active' : ''}`}
+            key={page as number}
+            className={`Pagination-button ${isDarkMode ? 'dark' : 'light'} ${(page as number) === currentPage ? 'active' : ''}`}
             onClick={() => {
               console.log('Клик на страницу', page);
-              onPageChange(page);
+              onPageChange(page as number);
             }}
-            disabled={page === currentPage}
+            disabled={(page as number) === currentPage}
           >
             {page}
           </button>

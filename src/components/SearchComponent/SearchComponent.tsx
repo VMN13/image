@@ -1,42 +1,55 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, FC } from "react";
 import { observer } from "mobx-react-lite";
 
-const SearchComponent = observer(({
+interface Image {
+  id: string;
+  alt: string;
+}
+
+interface SearchComponentProps {
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
+  images: Image[];
+  isDarkMode: boolean;
+}
+
+const SearchComponent: FC<SearchComponentProps> = observer(({
   searchTerm,
   setSearchTerm,
   images,
   isDarkMode
 }) => {
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const getSuggestion = (value) => {
+  const getSuggestion = (value: string): string => {
     if (!value || !Array.isArray(images) || images.length === 0) {
-      console.log('No images or value for suggestion');  // Логирование
       return '';
     }
     const lowerValue = value.toLowerCase();
     const matchingSuggestion = images
       .map(img => img.alt.toLowerCase())
       .find(alt => alt.startsWith(lowerValue) && alt !== lowerValue);
-    console.log('Suggestion for', value, ':', matchingSuggestion);  // Логирование
     return matchingSuggestion ? matchingSuggestion.slice(value.length) : '';
   };
 
   useEffect(() => {
     if (inputRef.current) {
-      inputRef.current.focus();
+      // Избегайте чтения свойств сразу после фокуса — используйте RAF
+      requestAnimationFrame(() => {
+        inputRef.current?.focus();
+      });
     }
   }, []);
 
   useEffect(() => {
-    const handleClick = (e) => {
+    const handleClick = (e: MouseEvent) => {
       if (
         inputRef.current &&
-        !inputRef.current.contains(e.target) &&
-        !e.target.closet('.Pagination') &&
-        !e.target.closet('.buttons-favorites') &&
-        !e.target.closet('.search') &&
-        !e.target.closet('.Main')
+        !inputRef.current.contains(e.target as Node) &&
+        !e.target.closest('.Pagination') &&
+        !e.target.closest('.buttons-favorites') &&
+        !e.target.closest('.search') &&
+        !e.target.closest('.Main')
       ){
         setSearchTerm('');
       }
@@ -45,11 +58,11 @@ const SearchComponent = observer(({
     return () => document.removeEventListener('click', handleClick);
   }, [setSearchTerm]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchTerm(e.target.value);
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     const suggestion = getSuggestion(searchTerm);
     if ((e.key === 'Tab' || e.key === 'Enter') && suggestion) {
       e.preventDefault();
@@ -73,9 +86,9 @@ const SearchComponent = observer(({
           onKeyDown={handleKeyDown}
           className={`search-input ${isDarkMode ? "dark" : "light"}`}
         />
-        <button className={`Clear ${isDarkMode ? 'dark' : 'light'} equal-width`}  type="button" onClick={() => setSearchTerm('')}>Очистить</button>
+        <button className={`Clear ${isDarkMode ? 'dark' : 'light'} equal-width`} type="button" onClick={() => setSearchTerm('')}>Очистить</button>
         {suggestion && (
-          <span className="search-suggestion" style={{ opacity: 0.5, position: 'absolute', left: '10px', top: '5px' }}>  {/* Добавьте inline-стиль для видимости */}
+          <span className="search-suggestion" style={{ opacity: 0.5, position: 'absolute', left: '10px', top: '5px' }}>
             {searchTerm}{suggestion}
           </span>
         )}

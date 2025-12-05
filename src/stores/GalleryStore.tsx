@@ -2,7 +2,13 @@
 import { makeObservable, observable, action, computed } from 'mobx';
 import images from '../data/images';  // Убедитесь, что путь правильный
 
+
+
 class GalleryStore {
+
+
+
+
   favorites = [];
   dislikes = [];
   filterMode = 'all';
@@ -10,7 +16,9 @@ class GalleryStore {
   searchTerm = '';
   currentPage = 1;
   itemsPerPage = 9;
-  zoomLevel = 'normal';
+  zoomLevels = {};
+
+
   constructor() {
     makeObservable(this, {
       favorites: observable,
@@ -34,11 +42,25 @@ class GalleryStore {
       setZoomLevel: action,
       clearFavorites: action,
       clearDislikes: action,
-      
+      zoomLevels: observable,
+      setZoomLevelForImage: action,
     });
 
     this.loadFromLocalStorage();
   }
+
+
+
+setZoomLevelForImage = (id, level) => {
+  this.zoomLevels = {...this.zoomLevels, [id]: level};
+}
+
+getZoomLevelForImage = (id) => {
+  return this.zoomLevels[id] || 'normal';
+};
+
+
+
 
   loadFromLocalStorage = () => {
     try {
@@ -55,13 +77,21 @@ class GalleryStore {
   };
 
   clearFavorites = () => {
+  if (confirm('Вы уверены, что хотите очистить избранное?')) {
     this.favorites = [];
     localStorage.setItem('favorites', JSON.stringify(this.favorites));
+  } else {
+    console.log('Избранное не очищено.');
+  }
   };
 
   clearDislikes = () => {
+  if (confirm('Вы уверены, что хотите очистить дизлайки?')) {
     this.dislikes = [];
     localStorage.setItem('dislikes', JSON.stringify(this.dislikes));
+  } else {
+    console.log('Дизлайки не очищены.');
+  }
   };
 
   // resetFilters = () => {

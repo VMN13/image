@@ -1,43 +1,66 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, FC } from 'react';
 import ReactDOM from 'react-dom';
-import { useTheme } from '../components/ThemeContext';
-import '../styles/global/AudioPlayer.css';
+import { useTheme } from '../ThemeContext';
+import './AudioPlayer.css';
+
+
+interface SoundUrls {
+  [key: string]: string;
+}
+
+interface SoundNames {
+  [key: string]: string;
+}
 
 // ... (soundUrls и soundNames остаются без изменений)
-const soundUrls = {
+const soundUrls: SoundUrls = {
   sea: '/sounds/water_ocean_waves_rocks_light_003.mp3', // Океанские волны
   forest: '/sounds/les.mp3', // Лесные звуки
   rain: '/sounds/deti-online.com_-_dozhd.mp3', // Дождь
   calm: 'https://www.soundjay.com/misc/sounds/wind-chimes-1.wav', // Спокойные звуки (ветер в колоколах)
 };
 
-const soundNames = {
+const soundNames: SoundNames = {
   sea: 'Море',
   forest: 'Лес',
   rain: 'Дождь',
   calm: 'Спокойная погода',
 };
-const AudioPlayer = () => {
-  const { isDarkMode } = useTheme();
-  const audioRef = useRef(null);
-  const intervalRef = useRef(null);
 
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentSound, setCurrentSound] = useState(null);
-  const [playbackTime, setPlaybackTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(1); // Новое состояние для громкости (0-1)
-  const [showFloatingPlayer, setShowFloatingPlayer] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
-  const [floatingPosition, setFloatingPosition] = useState({ top: 0, left: 20 }); // Новое состояние для позиции дублирующего плеера
-  const [isDragging, setIsDragging] = useState(false); // Для отслеживания перетаскивания
-  const dragStartRef = useRef({ x: 0, y: 0 }); // Начальная позиция мыши/тача
+
+interface FloatingPosition {
+  top: number;
+  left: number;
+}
+
+interface DragStart {
+  x: number;
+  y: number;
+}
+
+
+
+const AudioPlayer: FC = () => {
+  const { isDarkMode } = useTheme();
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [currentSound, setCurrentSound] = useState<string | null>(null);
+  const [playbackTime, setPlaybackTime] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(0);
+  const [volume, setVolume] = useState<number>(1); // Новое состояние для громкости (0-1)
+  const [showFloatingPlayer, setShowFloatingPlayer] = useState<boolean>(false);
+  const [isMinimized, setIsMinimized] = useState<boolean>(false);
+  const [floatingPosition, setFloatingPosition] = useState<FloatingPosition>({ top: 0, left: 20 }); // Новое состояние для позиции дублирующего плеера
+  const [isDragging, setIsDragging] = useState<boolean>(false); // Для отслеживания перетаскивания
+  const dragStartRef = useRef<DragStart>({ x: 0, y: 0 }); // Начальная позиция мыши/тача
 
   // Список звуков для переключения
-  const soundKeys = Object.keys(soundUrls);
+  const soundKeys: string[] = Object.keys(soundUrls);
 
   // Форматирование времени в MM:SS
-  const formatTime = (time) => {
+  const formatTime = (time:number): string => {
     if (isNaN(time)) return '00:00';
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
@@ -48,12 +71,14 @@ const AudioPlayer = () => {
   useEffect(() => {
     if (isPlaying) {
       intervalRef.current = setInterval(() => {
-        setPlaybackTime(audioRef.current.currentTime);
+        setPlaybackTime(audioRef.current?.currentTime || 0);
       }, 1000);
     } else {
-      clearInterval(intervalRef.current);
+      if (intervalRef.current) clearInterval(intervalRef.current);
     }
-    return () => clearInterval(intervalRef.current);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    }
   }, [isPlaying]);
 
   // Синхронизация громкости с аудио
@@ -63,8 +88,10 @@ const AudioPlayer = () => {
     }
   }, [volume]);
 
-  const handlePlay = (sound) => {
+  const handlePlay = (sound: string): void => {
     if (audioRef.current) {
+      const audio = new Audio(soundUrls[sound])
+      audio.preload = 'metadata';
       if (currentSound && currentSound !== sound) {
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
@@ -84,14 +111,14 @@ const AudioPlayer = () => {
     }
   };
 
-  const handlePause = () => {
+  const handlePause = (): void => {
     if (audioRef.current) {
       audioRef.current.pause();
       setIsPlaying(false);
     }
   };
 
-  const handleStop = () => {
+  const handleStop = (): void => {
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
@@ -102,40 +129,40 @@ const AudioPlayer = () => {
     }
   };
 
-  const handleLoadedMetadata = () => {
-    setDuration(audioRef.current.duration);
+  const handleLoadedMetadata = (): void => {
+    setDuration(audioRef.current?.duration || 0);
   };
 
-  const handleSeek = (e) => {
-    const newTime = e.target.value;
-    audioRef.current.currentTime = newTime;
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const newTime = parseFloat(e.target.value);
+    if (audioRef.current) audioRef.current.currentTime = newTime;
     setPlaybackTime(newTime);
   };
 
-  const handleVolumeChange = (e) => {
-    setVolume(e.target.value);
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setVolume(parseFloat(e.target.value));
   };
 
   // Функции для переключения звуков
-  const handlePrev = () => {
-    const currentIndex = soundKeys.indexOf(currentSound);
+  const handlePrev = (): void => {
+    const currentIndex = soundKeys.indexOf(currentSound || '');
     const prevIndex = (currentIndex - 1 + soundKeys.length) % soundKeys.length;
     handlePlay(soundKeys[prevIndex]);
   };
 
-  const handleNext = () => {
-    const currentIndex = soundKeys.indexOf(currentSound);
+  const handleNext = (): void => {
+    const currentIndex = soundKeys.indexOf(currentSound || '');
     const nextIndex = (currentIndex + 1) % soundKeys.length;
     handlePlay(soundKeys[nextIndex]);
   };
 
   // Функции для перетаскивания (ПК)
-  const handleMouseDown = (e) => {
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>): void => {
     setIsDragging(true);
     dragStartRef.current = { x: e.clientX - floatingPosition.left, y: e.clientY - floatingPosition.top };
   };
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>): void => {
     if (!isDragging) return;
     const newLeft = e.clientX - dragStartRef.current.x;
     const newTop = e.clientY - dragStartRef.current.y;
@@ -148,18 +175,18 @@ const AudioPlayer = () => {
     });
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (): void => {
     setIsDragging(false);
   };
 
   // Функции для перетаскивания (сенсорные экраны)
-  const handleTouchStart = (e) => {
+  const handleTouchStart = (e: TouchEvent<HTMLDivElement>): void => {
     setIsDragging(true);
     const touch = e.touches[0];
     dragStartRef.current = { x: touch.clientX - floatingPosition.left, y: touch.clientY - floatingPosition.top };
   };
 
-  const handleTouchMove = (e) => {
+  const handleTouchMove = (e: TouchEvent): void => {
     if (!isDragging) return;
     const touch = e.touches[0];
     const newLeft = touch.clientX - dragStartRef.current.x;
@@ -172,7 +199,7 @@ const AudioPlayer = () => {
     });
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (): void => {
     setIsDragging(false);
   };
 
@@ -197,11 +224,11 @@ const AudioPlayer = () => {
     };
   }, [isDragging]);
 
-  const handleCloseFloatingPlayer = () => {
+  const handleCloseFloatingPlayer = (): void => {
     handleStop();
   };
 
-  const toggleMinimize = () => {
+  const toggleMinimize = (): void => {
     setIsMinimized(!isMinimized);
   };
 

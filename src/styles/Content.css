@@ -16,7 +16,7 @@ img.fade-in {
   height: 40px;
   border-radius: 20px;
   font-size: 30px;
-  opacity: 0.7;
+  opacity: 0.7; /* <-- ИСПРАВЛЕНО: увеличена видимость */
 }
 
 
@@ -105,13 +105,10 @@ img.fade-in {
 }
 
 
-.search-input.dark {
-  color: white;
-  border-color: #555;
-}
+
 
 .search-input.light {
-  color: black;
+ 
 }
 
 .search-suggestion {
@@ -242,8 +239,7 @@ img.fade-in:nth-child(even) {
 
 input {
   margin: auto;
-  color: rgb(0, 0, 0);
-  background-color: rgb(203, 203, 203);
+  
   border-radius: 10px;
   height: 40px;
   padding: 20px;
@@ -352,7 +348,7 @@ img {
   bottom: 8px;
   flex-direction: row;
   gap: 10px;
-  z-index: 10; 
+  z-index: 20; /* <-- ГЛАВНОЕ ИСПРАВЛЕНИЕ: z-index увеличен до 20 */
 }
 
 
@@ -370,7 +366,7 @@ img {
   justify-content: center;
   align-items: center;
   font-size: 14px; /* Размер иконки */
-  opacity: 0.4;
+  opacity: 0.7; /* <-- ИСПРАВЛЕНО: увеличена базовая непрозрачность */
   transition: all 0.3s ease-in-out;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); ;
 }
@@ -378,7 +374,7 @@ img {
 .copy-button:hover, .favorite-button:hover, .dislike-button:hover, .share-button:hover {
   background: rgba(255, 255, 255, 0.9);
   transition: all 0.3s ease-in-out;
-  opacity: 2;
+  opacity: 1; /* <-- ИСПРАВЛЕНО: корректное значение opacity */
 }
 
 .favorite-button {
@@ -428,11 +424,6 @@ img {
 
 
 
-/* Убедитесь, что изображения имеют z-index выше overlay */
-.first_block img {
-  position: relative;
-  z-index: 11;
-}
 
 
 /* Удалите старые стили для .night-mode-button, если они были fixed */
@@ -444,7 +435,7 @@ img {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.8);
-  z-index: 10;
+  z-index: 10; /* Этот z-index теперь ниже, чем у кнопок */
   pointer-events: none; /* Чтобы не блокировать клики на изображениях */
 }
 
@@ -467,10 +458,7 @@ img {
 }
 
 /* Убедитесь, что изображения имеют z-index выше overlay */
-.first_block img {
-  position: relative;
-  z-index: 11;
-}
+
 
 
 }

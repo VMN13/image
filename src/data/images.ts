@@ -1,3 +1,5 @@
+
+
 const images = [
   // Nature (40 изображений)
   { id: 1, url: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400', alt: 'Лес в тумане', category: 'nature' },

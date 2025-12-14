@@ -1,4 +1,5 @@
-import React, { FC } from "react";
+import React, { useState } from "react";
+import type { FC } from "react";
 import { observer } from "mobx-react-lite";
 import galleryStore from "../../stores/GalleryStore";
 import Pagination from "../Pagination/Pagination";
@@ -23,6 +24,9 @@ interface GalleryGridProps {
 const GalleryGrid: FC<GalleryGridProps> = observer(({ nightMode, setNightMode, onOpenModal, onPageChange }) => {
   const { isDarkMode } = useTheme();
 
+  // Проверка уровня зума (добавлено)
+  const isZoomed = galleryStore.zoomLevel === 'zoomed';
+
   return (
     <div className={`Content ${isDarkMode ? 'dark' : 'light'}`}>
       <Pagination currentPage={galleryStore.currentPage} totalPages={galleryStore.totalPages} onPageChange={onPageChange} />
@@ -44,7 +48,12 @@ const GalleryGrid: FC<GalleryGridProps> = observer(({ nightMode, setNightMode, o
         )}
         {galleryStore.currentImages.length > 0 ? (
           galleryStore.currentImages.map((image: Image) => (
-            <ImageItem key={image.id} image={image} onOpenModal={onOpenModal} />
+            <ImageItem 
+              key={image.id} 
+              image={image} 
+              onOpenModal={onOpenModal} 
+              isZoomed={isZoomed} // Передаём пропс для зума
+            />
           ))
         ) : (
           <div className="NotFound">

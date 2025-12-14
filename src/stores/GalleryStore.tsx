@@ -1,23 +1,30 @@
-// GalleryStore.js
+// GalleryStore.ts
 import { makeObservable, observable, action, computed } from 'mobx';
 import images from '../data/images';  // Убедитесь, что путь правильный
 
+// Интерфейс для изображения (добавьте поля по необходимости)
+interface Image {
+  id: string;  // Или number, если ID числовой
+  alt: string;
+  category: string;
+  // url?: string;  // Добавьте, если есть
+}
 
+// Типы для фильтров и секций
+type FilterMode = 'all' | 'favorites' | 'dislikes';
+type Section = 'all' | 'nature' | 'cities' | 'animals' | 'tech' | 'food';
+type ZoomLevel = 'normal' | 'zoom1' | 'zoom2';  // Пример, настройте по необходимости
 
 class GalleryStore {
-
-
-
-
-  favorites = [];
-  dislikes = [];
-  filterMode = 'all';
-  currentSection = 'all';
-  searchTerm = '';
-  currentPage = 1;
-  itemsPerPage = 9;
-  zoomLevels = {};
-
+  // Observable свойства с типами
+  favorites: string[] = [];
+  dislikes: string[] = [];
+  filterMode: FilterMode = 'all';
+  currentSection: Section = 'all';
+  searchTerm: string = '';
+  currentPage: number = 1;
+  itemsPerPage: number = 9;
+  zoomLevels: Record<string, ZoomLevel> = {};  // Ключ: id изображения, значение: уровень зума
 
   constructor() {
     makeObservable(this, {
@@ -28,6 +35,7 @@ class GalleryStore {
       searchTerm: observable,
       currentPage: observable,
       itemsPerPage: observable,
+      zoomLevels: observable,
       filteredImages: computed,
       totalPages: computed,
       currentImages: computed,
@@ -40,79 +48,68 @@ class GalleryStore {
       loadFromLocalStorage: action,
       saveToLocalStorage: action,
       setZoomLevel: action,
+      setZoomLevelForImage: action,
       clearFavorites: action,
       clearDislikes: action,
-      zoomLevels: observable,
-      setZoomLevelForImage: action,
     });
 
     this.loadFromLocalStorage();
   }
 
+  // Методы с типами
+  setZoomLevelForImage = (id: string, level: ZoomLevel): void => {
+    this.zoomLevels = { ...this.zoomLevels, [id]: level };
+  };
 
+  getZoomLevelForImage = (id: string): ZoomLevel => {
+    return this.zoomLevels[id] || 'normal';
+  };
 
-setZoomLevelForImage = (id, level) => {
-  this.zoomLevels = {...this.zoomLevels, [id]: level};
-}
-
-getZoomLevelForImage = (id) => {
-  return this.zoomLevels[id] || 'normal';
-};
-
-
-
-
-  loadFromLocalStorage = () => {
+  loadFromLocalStorage = (): void => {
     try {
-      this.favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-      this.dislikes = JSON.parse(localStorage.getItem('dislikes')) || [];
+      const favoritesData = localStorage.getItem('favorites');
+      const dislikesData = localStorage.getItem('dislikes');
+      this.favorites = favoritesData ? JSON.parse(favoritesData) : [];
+      this.dislikes = dislikesData ? JSON.parse(dislikesData) : [];
     } catch (error) {
       console.error('Error parsing from localStorage:', error);
     }
   };
 
-  saveToLocalStorage = () => {
+  saveToLocalStorage = (): void => {
     localStorage.setItem('favorites', JSON.stringify(this.favorites));
     localStorage.setItem('dislikes', JSON.stringify(this.dislikes));
   };
 
-  clearFavorites = () => {
-  if (confirm('Вы уверены, что хотите очистить избранное?')) {
-    this.favorites = [];
-    localStorage.setItem('favorites', JSON.stringify(this.favorites));
-  } else {
-    console.log('Избранное не очищено.');
-  }
+  clearFavorites = (): void => {
+    if (confirm('Вы уверены, что хотите очистить избранное?')) {
+      this.favorites = [];
+      this.saveToLocalStorage();
+    } else {
+      console.log('Избранное не очищено.');
+    }
   };
 
-  clearDislikes = () => {
-  if (confirm('Вы уверены, что хотите очистить дизлайки?')) {
-    this.dislikes = [];
-    localStorage.setItem('dislikes', JSON.stringify(this.dislikes));
-  } else {
-    console.log('Дизлайки не очищены.');
-  }
+  clearDislikes = (): void => {
+    if (confirm('Вы уверены, что хотите очистить дизлайки?')) {
+      this.dislikes = [];
+      this.saveToLocalStorage();
+    } else {
+      console.log('Дизлайки не очищены.');
+    }
   };
 
-  // resetFilters = () => {
-  //   this.filterMode = 'all';
-  //   this.currentSection = 'all';
-  //   this.searchTerm = '';
-  //   this.currentPage = 1;
-  //   };
+  setZoomLevel = (level: ZoomLevel): void => {
+    // Примечание: Это метод без параметров ID, возможно, для глобального зума. Если нужно, добавьте логику.
+    console.log('Setting global zoom level:', level);
+  };
 
-
-setZoomLevel = (level) => {
-  this.zoomLevel = level;
-}
-
-
-  setFilterMode = (mode) => {
+  setFilterMode = (mode: FilterMode): void => {
     this.filterMode = mode;
     this.currentPage = 1;
   };
 
-  toggleFavorite = (id) => {
+  toggleFavorite = (id: string): void => {
     if (this.favorites.includes(id)) {
       this.favorites = this.favorites.filter(favId => favId !== id);
     } else {
@@ -125,7 +122,7 @@ setZoomLevel = (level) => {
     this.saveToLocalStorage();
   };
 
-  toggleDislike = (id) => {
+  toggleDislike = (id: string): void => {
     if (this.dislikes.includes(id)) {
       this.dislikes = this.dislikes.filter(dislikeId => dislikeId !== id);
     } else {
@@ -138,27 +135,22 @@ setZoomLevel = (level) => {
     this.saveToLocalStorage();
   };
 
-  setCurrentSection = (section) => {
+  setCurrentSection = (section: Section): void => {
     this.currentSection = section;
     this.currentPage = 1;
   };
 
-
-  
-
-
-
-
-  setSearchTerm = (term) => {
+  setSearchTerm = (term: string): void => {
     console.log('Setting searchTerm:', term);
     this.searchTerm = term;
     this.currentPage = 1;
   };
 
-  get filteredImages() {
-    console.log('filteredImages: images from import:', images);
-    let imagesFiltered = images;
-    console.log('filteredImages: Initial count:', images.length);
+  // Computed свойства с типами
+  get filteredImages(): Image[] {
+  
+    let imagesFiltered: Image[] = images;
+    
 
     if (this.currentSection !== 'all') {
       imagesFiltered = imagesFiltered.filter(image => image.category === this.currentSection);
@@ -182,32 +174,29 @@ setZoomLevel = (level) => {
     return imagesFiltered;
   }
 
-
-
-  get totalPages() {
+  get totalPages(): number {
     return Math.ceil(this.filteredImages.length / this.itemsPerPage);
   }
-  // Computed для currentImages (текущие изображения на странице)
-  get currentImages() {
+
+  get currentImages(): Image[] {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     const end = start + this.itemsPerPage;
     return this.filteredImages.slice(start, end);
   }
-  setCurrentPage(page) {
+
+  setCurrentPage = (page: number): void => {
     this.currentPage = page;
-  }
+  };
 
-
-
-  isFavorite = (id) => {
+  isFavorite = (id: string): boolean => {
     return this.favorites.includes(id);
   };
 
-  isDisliked = (id) => {
+  isDisliked = (id: string): boolean => {
     return this.dislikes.includes(id);
   };
 
-  getSectionTitle = () => {
+  getSectionTitle = (): string => {
     switch (this.currentSection) {
       case 'nature': return 'Природа';
       case 'cities': return 'Города';

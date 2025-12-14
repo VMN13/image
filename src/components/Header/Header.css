@@ -34,6 +34,9 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   padding: 0 20px; /* Добавлен padding для предотвращения вылезания элементов */
+  box-shadow: 10px 10px 400px 41px rgba(255,111,62,0.75);
+-webkit-box-shadow: 10px 10px 400px 41px rgba(255,111,62,0.75);
+-moz-box-shadow: 10px 10px 400px 41px rgba(255,111,62,0.75);
 }
 
 .Mode.light {
@@ -87,7 +90,7 @@
   color: inherit;
 }
 
-h1 {
+.h1_header {
   margin: 0; /* Убрана лишняя центровка, так как .header теперь space-between */
   font-size: 1.8rem; /* Уменьшен для компактности */
   white-space: nowrap; /* Предотвращает перенос текста */

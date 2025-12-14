@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, FC } from "react";
+import React, { useRef, useEffect } from "react";
+import type { FC } from "react";
 import { observer } from "mobx-react-lite";
 
 interface Image {

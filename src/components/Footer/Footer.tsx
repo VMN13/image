@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import "./Footer.css";
 import { useTheme } from "../ThemeContext";
 
 const Footer: FC = () => {
@@ -6,7 +7,7 @@ const Footer: FC = () => {
   return (
     <div className={`Footer ${isDarkMode ? "dark" : "light"}`}>
       <div className="footer">
-        <h1>Image Gallery All rights reserved <br /> 2025 ©︎</h1>
+        <h1 className="footer_h1">Image Gallery All rights reserved <br /> 2025 ©︎</h1>
       </div>
     </div>
   );

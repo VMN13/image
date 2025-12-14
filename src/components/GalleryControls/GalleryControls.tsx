@@ -1,4 +1,5 @@
-import React, { useRef, useState, useEffect, FC } from "react";
+import React, { useRef, useState, useEffect,  } from "react";
+import type { FC } from "react";
 import { observer } from "mobx-react-lite";
 import galleryStore from "../../stores/GalleryStore";
 import PhotoCounter from "../PhotoCounter/PhotoCounter";
@@ -42,7 +43,7 @@ const GalleryControls: FC = observer(() => {
         />
         <div className="search">
           <select  
-            className={`section-select ${isDarkMode ? 'dark' : 'light'}`}
+            id={`select ${isDarkMode ? 'dark' : 'light'}`}
             value={galleryStore.currentSection}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => galleryStore.setCurrentSection(e.target.value)}
             onFocus={() => setIsSelectFocused(true)}

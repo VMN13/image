@@ -1,4 +1,6 @@
-import React, { useState, useRef, useEffect, FC } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import type { FC } from "react";
+
 import ReactDOM from 'react-dom';
 import { useTheme } from '../ThemeContext';
 import './AudioPlayer.css';

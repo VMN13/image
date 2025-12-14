@@ -1,4 +1,5 @@
-import React, { useState, FC } from "react";
+import React, { useState } from "react";
+import type { FC } from "react";
 import { observer } from "mobx-react-lite";
 import galleryStore from "../../stores/GalleryStore";
 import LazyImage from "../../components/LazyImage/LazyImage";

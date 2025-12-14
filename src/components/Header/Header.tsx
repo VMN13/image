@@ -1,4 +1,5 @@
-import React, { FC, MouseEvent } from "react";
+import React, { MouseEvent } from "react";
+import type { FC } from "react";
 import { useTheme } from "../ThemeContext";
 import galleryStore from "../../stores/GalleryStore";
 import "./Header.css";
@@ -27,7 +28,7 @@ const Header: FC = () => {
       style={{ cursor: 'pointer' }}
     >
       <div className={`header ${isDarkMode ? "dark" : "light"}`}>
-        <h1 className="h1">Image Gallery</h1>
+        <h1 className="h1_header">Image Gallery</h1>
         <button className={`Mode ${isDarkMode ? "light" : "dark"}`} onClick={handleThemeToggle}>
           {isDarkMode ? "Light Mode" : "Dark Mode"}
         </button>              

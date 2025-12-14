@@ -1,4 +1,5 @@
-import React, { useState, FC, ReactElement } from "react";
+import React, { useState,  ReactElement } from "react";
+import type { FC } from "react";
 import CountUp from 'react-countup';
 import images from '../../data/images';
 import '../../styles/global/Confetti.css';

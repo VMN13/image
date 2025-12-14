@@ -1,5 +1,5 @@
-import React, { createContext, useState, useContext, useEffect, FC, ReactNode } from 'react';
-
+import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import type { FC } from "react";
 interface ThemeContextType {
   isDarkMode: boolean;
   toggleTheme: () => void;

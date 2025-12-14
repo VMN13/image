@@ -1,13 +1,14 @@
-import React, { useState, useEffect, FC, lazy, Suspense } from "react";
+import  { useState, useEffect, lazy, Suspense } from "react";
+import type { FC } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "./components/ThemeContext";
 import Header from "./components/Header/Header";
+
 import Footer from "./components/Footer/Footer";
 import "./styles/global/global.css";
 
+const CombinedContent = lazy(() => import("./components/content/CombinedContent"));
 
-const CombinedContent = lazy(() => import("./components/content/CombinedContent"))
-const AudioPlayer = lazy(() => import("./components/AudioPlayer/AudioPlayer"))
 interface User {
   // Определите поля пользователя, например:
   id: string;
@@ -32,13 +33,14 @@ const App: FC = () => {
           <Header />
           <Router>
             <Suspense fallback={<div>Loading...</div>}>
-            <div className="App">
-              <Routes>
-                <Route path="/" element={<CombinedContent user={user} />} />
-              </Routes>
-            </div>
+              <div className="App">
+                <Routes>
+                  <Route path="/" element={<CombinedContent user={user} />} />
+                </Routes>
+              </div>
             </Suspense>
           </Router>
+          
           <Footer />
           <Suspense fallback={<div>Loading...</div>}>
           </Suspense>

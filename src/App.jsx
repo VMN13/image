@@ -1,23 +1,14 @@
-import  { useState, useEffect, lazy, Suspense } from "react";
-import type { FC } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "./components/ThemeContext";
 import Header from "./components/Header/Header";
-
 import Footer from "./components/Footer/Footer";
 import "./styles/global/global.css";
 
 const CombinedContent = lazy(() => import("./components/content/CombinedContent"));
 
-interface User {
-  // Определите поля пользователя, например:
-  id: string;
-  name: string;
-  // Добавьте другие поля
-}
-
-const App: FC = () => {
-  const [user, setUser] = useState<User | null>(null);
+const App = () => {
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const savedUser = JSON.parse(localStorage.getItem("user") || 'null');

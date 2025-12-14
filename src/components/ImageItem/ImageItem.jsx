@@ -1,26 +1,13 @@
 import React, { useState } from "react";
-import type { FC } from "react";
 import { observer } from "mobx-react-lite";
 import galleryStore from "../../stores/GalleryStore";
 import LazyImage from "../../components/LazyImage/LazyImage";
 
-interface Image {
-  id: string;
-  url: string;
-  alt: string;
-  // Добавьте другие поля
-}
+const ImageItem = observer(({ image, onOpenModal }) => {
+  const [showActionButtons, setShowActionButtons] = useState(false);
+  const [actionTimeout, setActionTimeout] = useState(null);
 
-interface ImageItemProps {
-  image: Image;
-  onOpenModal: (image: Image) => void;
-}
-
-const ImageItem: FC<ImageItemProps> = observer(({ image, onOpenModal }) => {
-  const [showActionButtons, setShowActionButtons] = useState<boolean>(false);
-  const [actionTimeout, setActionTimeout] = useState<NodeJS.Timeout | null>(null);
-
-  const toggleActionButtons = (): void => {
+  const toggleActionButtons = () => {
     if (showActionButtons) {
       setShowActionButtons(false);
       if (actionTimeout) {
@@ -37,7 +24,7 @@ const ImageItem: FC<ImageItemProps> = observer(({ image, onOpenModal }) => {
     }
   };
 
-  const copyImageUrl = async (url: string): Promise<void> => {
+  const copyImageUrl = async (url) => {
     try {
       await navigator.clipboard.writeText(url);
       alert('URL изображения скопирован в буфер обмена!');
@@ -47,7 +34,7 @@ const ImageItem: FC<ImageItemProps> = observer(({ image, onOpenModal }) => {
     }
   };
 
-  const shareImageUrl = async (url: string, alt: string): Promise<void> => {
+  const shareImageUrl = async (url, alt) => {
     if (navigator.share) {
       try {
         await navigator.share({ title: 'Изображение из галереи', text: `Посмотри на изображение "${alt}" в галерее!`, url: url });
@@ -61,7 +48,7 @@ const ImageItem: FC<ImageItemProps> = observer(({ image, onOpenModal }) => {
     }
   };
 
-  const handleZoomToggle = (): void => {
+  const handleZoomToggle = () => {
     const currentLevel = galleryStore.getZoomLevelForImage(image.id);
     const newLevel = currentLevel === 'zoomed' ? 'normal' : 'zoomed';
     galleryStore.setZoomLevelForImage(image.id, newLevel);

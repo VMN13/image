@@ -1,13 +1,12 @@
-import React, { MouseEvent } from "react";
-import type { FC } from "react";
+import React from "react";
 import { useTheme } from "../ThemeContext";
 import galleryStore from "../../stores/GalleryStore";
 import "./Header.css";
 
-const Header: FC = () => {
+const Header = () => {
   const { isDarkMode, toggleTheme } = useTheme();
 
-  const handleShowAllPhotos = (): void => {
+  const handleShowAllPhotos = () => {
     console.log("Клик по Header сработал! Сбрасываю фильтры...");
     galleryStore.setSearchTerm('');
     galleryStore.setCurrentSection('all');
@@ -16,7 +15,7 @@ const Header: FC = () => {
     console.log("Фильтры сброшены.");
   };
 
-  const handleThemeToggle = (event: MouseEvent<HTMLButtonElement>): void => {
+  const handleThemeToggle = (event) => {
     event.stopPropagation();
     toggleTheme();
   };

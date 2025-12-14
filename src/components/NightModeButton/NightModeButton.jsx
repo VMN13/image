@@ -1,12 +1,6 @@
-import React  from 'react';
-import type { FC } from "react";
+import React from 'react';
 
-interface NightModeButtonProps {
-  nightMode: boolean;
-  setNightMode: (mode: boolean) => void;
-}
-
-const NightModeButton: FC<NightModeButtonProps> = ({ nightMode, setNightMode }) => {
+const NightModeButton = ({ nightMode, setNightMode }) => {
   return (
     <>
       {nightMode && <div className="night-overlay"></div>}

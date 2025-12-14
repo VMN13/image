@@ -1,15 +1,14 @@
 import React from "react";
-import type { FC } from "react";
-import { observer } from "mobx-react-lite"; // Добавлен observer
+import { observer } from "mobx-react-lite";
 import galleryStore from "../../stores/GalleryStore";
 import "../styles/ImageZoom.css";
 
-const ImageZoom: FC = observer(() => { // Обернул в observer
-  const handleZoomIn = (): void => {
+const ImageZoom = observer(() => {
+  const handleZoomIn = () => {
     galleryStore.setZoomLevel('zoomed');
   };
 
-  const handleZoomOut = (): void => {
+  const handleZoomOut = () => {
     galleryStore.setZoomLevel('normal');
   };
 
@@ -18,7 +17,7 @@ const ImageZoom: FC = observer(() => { // Обернул в observer
       <button 
         onClick={handleZoomIn}
         disabled={galleryStore.zoomLevel === 'zoomed'}
-        className="zoom-button zoom-in" // Исправил класс (было zoom-out, теперь zoom-in для увеличения)
+        className="zoom-button zoom-in"
         title="Увеличить блоки изображений"
       >
         ➕
@@ -26,7 +25,7 @@ const ImageZoom: FC = observer(() => { // Обернул в observer
       <button 
         onClick={handleZoomOut}
         disabled={galleryStore.zoomLevel === 'normal'}
-        className="zoom-button zoom-out" // Исправил класс (было zoom-in, теперь zoom-out для уменьшения)
+        className="zoom-button zoom-out"
         title="Уменьшить блоки изображений"
       >
         ➖

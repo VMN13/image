@@ -1,12 +1,11 @@
-import React, { useState,  ReactElement } from "react";
-import type { FC } from "react";
+import React, { useState } from "react";
 import CountUp from 'react-countup';
 import images from '../../data/images';
 import '../../styles/global/Confetti.css';
 
-const PhotoCounter: FC = React.memo(() => {
+const PhotoCounter = React.memo(() => {
   const totalPhotos = images.length;
-  const [isCompleted, setIsCompleted] = useState<boolean>(false);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   return (
     <div className="counter-wrapper">
@@ -22,7 +21,7 @@ const PhotoCounter: FC = React.memo(() => {
       </div>
       {isCompleted && (
         <div className="confetti">
-          {[...Array(30)].map((_, i): ReactElement => {
+          {[...Array(30)].map((_, i) => {
             const left = Math.random() * 100;
             const delay = Math.random() * 0.5;
             const duration = 2 + Math.random() * 2;
@@ -35,7 +34,7 @@ const PhotoCounter: FC = React.memo(() => {
                   '--left': `${left}%`,
                   '--delay': `${delay}s`,
                   '--duration': `${duration}s`,
-                } as React.CSSProperties}
+                }}
               >
                 ★
               </div>

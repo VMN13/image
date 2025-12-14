@@ -338,9 +338,7 @@
     transition: all 0.3s ease-in-out;
   }
 
-  .search-input.light {
-    /* Вариации для светлой темы */
-  }
+ 
 
   .search-suggestion {
     position: absolute;

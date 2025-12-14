@@ -1,19 +1,18 @@
-import React, { useRef, useState, useEffect,  } from "react";
-import type { FC } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import galleryStore from "../../stores/GalleryStore";
 import PhotoCounter from "../PhotoCounter/PhotoCounter";
 import SearchComponent from "../SearchComponent/SearchComponent";
 import { useTheme } from "../ThemeContext";
 
-const GalleryControls: FC = observer(() => {
+const GalleryControls = observer(() => {
   const { isDarkMode } = useTheme();
-  const [isSelectFocused, setIsSelectFocused] = useState<boolean>(false);
-  const selectContainerRef = useRef<HTMLDivElement>(null);
+  const [isSelectFocused, setIsSelectFocused] = useState(false);
+  const selectContainerRef = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (isSelectFocused && selectContainerRef.current && !selectContainerRef.current.contains(event.target as Node)) {
+    const handleClickOutside = (event) => {
+      if (isSelectFocused && selectContainerRef.current && !selectContainerRef.current.contains(event.target)) {
         setIsSelectFocused(false);
       }
     };
@@ -23,7 +22,7 @@ const GalleryControls: FC = observer(() => {
     };
   }, [isSelectFocused]);
 
-  const handleClearFilters = (): void => {
+  const handleClearFilters = () => {
     galleryStore.setFilterMode('all');
     galleryStore.setSearchTerm('');
     galleryStore.setCurrentSection('all');
@@ -45,7 +44,7 @@ const GalleryControls: FC = observer(() => {
           <select  
             id={`select ${isDarkMode ? 'dark' : 'light'}`}
             value={galleryStore.currentSection}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => galleryStore.setCurrentSection(e.target.value)}
+            onChange={(e) => galleryStore.setCurrentSection(e.target.value)}
             onFocus={() => setIsSelectFocused(true)}
           >
             <option value="all">Все разделы</option>

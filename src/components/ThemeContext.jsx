@@ -1,18 +1,9 @@
-import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import type { FC } from "react";
-interface ThemeContextType {
-  isDarkMode: boolean;
-  toggleTheme: () => void;
-}
+import React,{ createContext, useState, useContext, useEffect } from 'react';
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+const ThemeContext = createContext(undefined);
 
-interface ThemeProviderProps {
-  children: ReactNode;
-}
-
-export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
+const ThemeProvider = ({ children }) => {
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
@@ -24,7 +15,7 @@ export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
     }
   }, []);
 
-  const toggleTheme = (): void => {
+  const toggleTheme = () => {
     const newTheme = !isDarkMode;
     setIsDarkMode(newTheme);
     localStorage.setItem('theme', newTheme ? 'dark' : 'light');
@@ -39,10 +30,12 @@ export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
   );
 };
 
-export const useTheme = (): ThemeContextType => {
+const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) {
     throw new Error('useTheme must be used within a ThemeProvider');
   }
   return context;
 };
+
+export { ThemeProvider, useTheme };

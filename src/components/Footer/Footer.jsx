@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import "./Footer.css";
 import { useTheme } from "../ThemeContext";
 
-const Footer: FC = () => {
+const Footer = () => {
   const { isDarkMode } = useTheme();
   return (
     <div className={`Footer ${isDarkMode ? "dark" : "light"}`}>

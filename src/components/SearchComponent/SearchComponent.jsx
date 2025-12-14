@@ -1,28 +1,15 @@
 import React, { useRef, useEffect } from "react";
-import type { FC } from "react";
 import { observer } from "mobx-react-lite";
 
-interface Image {
-  id: string;
-  alt: string;
-}
-
-interface SearchComponentProps {
-  searchTerm: string;
-  setSearchTerm: (term: string) => void;
-  images: Image[];
-  isDarkMode: boolean;
-}
-
-const SearchComponent: FC<SearchComponentProps> = observer(({
+const SearchComponent = observer(({
   searchTerm,
   setSearchTerm,
   images,
   isDarkMode
 }) => {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef(null);
 
-  const getSuggestion = (value: string): string => {
+  const getSuggestion = (value) => {
     if (!value || !Array.isArray(images) || images.length === 0) {
       return '';
     }
@@ -35,7 +22,6 @@ const SearchComponent: FC<SearchComponentProps> = observer(({
 
   useEffect(() => {
     if (inputRef.current) {
-      // Избегайте чтения свойств сразу после фокуса — используйте RAF
       requestAnimationFrame(() => {
         inputRef.current?.focus();
       });
@@ -43,10 +29,10 @@ const SearchComponent: FC<SearchComponentProps> = observer(({
   }, []);
 
   useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
+    const handleClick = (e) => {
       if (
         inputRef.current &&
-        !inputRef.current.contains(e.target as Node) &&
+        !inputRef.current.contains(e.target) &&
         !e.target.closest('.Pagination') &&
         !e.target.closest('.buttons-favorites') &&
         !e.target.closest('.search') &&
@@ -59,11 +45,11 @@ const SearchComponent: FC<SearchComponentProps> = observer(({
     return () => document.removeEventListener('click', handleClick);
   }, [setSearchTerm]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+  const handleKeyDown = (e) => {
     const suggestion = getSuggestion(searchTerm);
     if ((e.key === 'Tab' || e.key === 'Enter') && suggestion) {
       e.preventDefault();

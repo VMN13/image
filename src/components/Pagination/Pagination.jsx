@@ -1,26 +1,19 @@
 import React from "react";
-import type { FC } from "react";
 import { useTheme } from "../ThemeContext";
 
-interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-}
-
-const Pagination: FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const { isDarkMode } = useTheme();
   
-  const goToPrevious = (): void => {
+  const goToPrevious = () => {
     onPageChange(currentPage - 1);
   };
 
-  const goToNext = (): void => {
+  const goToNext = () => {
     onPageChange(currentPage + 1);
   };
 
-  const getPageNumbers = (): (number | string)[] => {
-    const pages: (number | string)[] = [];
+  const getPageNumbers = () => {
+    const pages = [];
     const maxVisible = 5;
 
     if (totalPages <= maxVisible) {
@@ -72,13 +65,13 @@ const Pagination: FC<PaginationProps> = ({ currentPage, totalPages, onPageChange
         }
         return (
           <button 
-            key={page as number}
-            className={`Pagination-button ${isDarkMode ? 'dark' : 'light'} ${(page as number) === currentPage ? 'active' : ''}`}
+            key={page}
+            className={`Pagination-button ${isDarkMode ? 'dark' : 'light'} ${(page) === currentPage ? 'active' : ''}`}
             onClick={() => {
               console.log('Клик на страницу', page);
-              onPageChange(page as number);
+              onPageChange(page);
             }}
-            disabled={(page as number) === currentPage}
+            disabled={(page) === currentPage}
           >
             {page}
           </button>

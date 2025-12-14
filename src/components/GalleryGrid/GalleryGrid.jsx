@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import type { FC } from "react";
 import { observer } from "mobx-react-lite";
 import galleryStore from "../../stores/GalleryStore";
 import Pagination from "../Pagination/Pagination";
@@ -7,24 +6,9 @@ import ImageItem from "../ImageItem/ImageItem";
 import NightModeButton from "../NightModeButton/NightModeButton";
 import { useTheme } from "../ThemeContext";
 
-interface Image {
-  id: string;
-  url: string;
-  alt: string;
-  // Добавьте другие поля
-}
-
-interface GalleryGridProps {
-  nightMode: boolean;
-  setNightMode: (mode: boolean) => void;
-  onOpenModal: (image: Image) => void;
-  onPageChange: (page: number) => void;
-}
-
-const GalleryGrid: FC<GalleryGridProps> = observer(({ nightMode, setNightMode, onOpenModal, onPageChange }) => {
+const GalleryGrid = observer(({ nightMode, setNightMode, onOpenModal, onPageChange }) => {
   const { isDarkMode } = useTheme();
 
-  // Проверка уровня зума (добавлено)
   const isZoomed = galleryStore.zoomLevel === 'zoomed';
 
   return (
@@ -47,12 +31,12 @@ const GalleryGrid: FC<GalleryGridProps> = observer(({ nightMode, setNightMode, o
           </div>
         )}
         {galleryStore.currentImages.length > 0 ? (
-          galleryStore.currentImages.map((image: Image) => (
+          galleryStore.currentImages.map((image) => (
             <ImageItem 
               key={image.id} 
               image={image} 
               onOpenModal={onOpenModal} 
-              isZoomed={isZoomed} // Передаём пропс для зума
+              isZoomed={isZoomed}
             />
           ))
         ) : (

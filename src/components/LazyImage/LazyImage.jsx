@@ -1,14 +1,6 @@
-import React, {  useEffect } from 'react';
-import type { FC } from "react";
-interface LazyImageProps {
-  src: string;
-  alt: string;
-  className?: string;
-  onClick?: () => void;
-  webpSrc?: string;
-}
+import React, { useEffect } from 'react';
 
-const LazyImage: FC<LazyImageProps> = ({src, alt, className, onClick, webpSrc}) => {
+const LazyImage = ({src, alt, className, onClick, webpSrc}) => {
   useEffect(() => {
     if (webpSrc) {
       const img = new Image();
@@ -30,6 +22,5 @@ const LazyImage: FC<LazyImageProps> = ({src, alt, className, onClick, webpSrc}) 
     </picture>
   )
 }
-
 
 export default LazyImage;
